@@ -13,4 +13,9 @@ class Clinic extends Model
     {
         return $this->hasMany(User::class, 'clinic_id');
     }
+
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
 }

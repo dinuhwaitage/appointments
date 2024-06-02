@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Clinics\ClinicDetailResource;
-use App\Http\Resources\Clinics\ClinicListResource;
+use App\Http\Resources\Employees\EmployeeDetailResource;
+use App\Http\Resources\Employees\EmployeeListResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Address\AddressDetailResource;
-use App\Models\Clinic;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
-class ClinicController extends Controller
+class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class ClinicController extends Controller
      */
     public function index()
     {
-        return ClinicListResource::collection(Clinic::all());
+        return EmployeeListResource::collection(Employee::all());
     }
 
     /**
@@ -35,22 +35,22 @@ class ClinicController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Employee $employee)
     {
-        return new ClinicDetailResource(Clinic::findOrFail($id));
+        return new EmployeeDetailResource(Employee::findOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Employee $employee)
     {
         //
     }
@@ -58,10 +58,10 @@ class ClinicController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Employee $employee)
     {
         //
     }

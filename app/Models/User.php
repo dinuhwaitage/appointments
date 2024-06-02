@@ -28,6 +28,16 @@ class User extends Authenticatable
         return $this->belongsTo(Clinic::class);
     }
 
+    public function contact()
+    {
+        return $this->morphOne(Contact::class, 'contactable');
+    }
+
+    public function addresses()
+    {
+        return $this->morphMany(Address::class, 'addressable');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
