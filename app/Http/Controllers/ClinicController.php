@@ -7,6 +7,7 @@ use App\Http\Resources\Clinics\ClinicListResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Address\AddressDetailResource;
 use App\Models\Clinic;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ClinicController extends Controller
