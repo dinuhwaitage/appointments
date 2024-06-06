@@ -7,6 +7,8 @@ use App\Http\Resources\Employees\EmployeeListResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Address\AddressDetailResource;
 use App\Models\Employee;
+use App\Models\Contact;
+use App\Models\Address;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -29,7 +31,23 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->client_id = Auth::user()->client_id;
+        // Create the employee
+        $employee = Employee::create($request);
+
+        if ($request->has('address')) {
+            // Attach the address to the employee
+            $address = new Address($request->address);
+            $employee->address()->save($address);
+        }
+
+        if ($request->has('contact')) {
+            // Attach the contact to the employee
+            $contact = new Contact($request->contact);
+            $employee->contact()->save($contact);
+        }
+        return response()->json($employee->load('address','contact'), 201);
+
     }
 
     /**
