@@ -69,7 +69,7 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
-        return new PatientDetailResource(Patient::findOrFail($id));
+        return new PatientDetailResource($patient);
     }
 
     /**

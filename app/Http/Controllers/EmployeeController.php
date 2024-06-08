@@ -21,7 +21,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return EmployeeListResource::collection(Employee::where('designation', '!=', 'DOCTOR')->get());
+        $employees = Auth::user()->clinic->employees->where('designation', '!=', 'DOCTOR');
+        return EmployeeListResource::collection($employees);
     }
 
     /**
@@ -68,9 +69,10 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function show(Employee $employee)
+    public function show($id)
     {
-        return new EmployeeDetailResource(Employee::findOrFail($id));
+        $employee = Auth::user()->clinic->employees->find($id);
+        return new EmployeeDetailResource($employee);
     }
 
     /**
@@ -90,8 +92,8 @@ class EmployeeController extends Controller
             'contact' => 'required|array'
         ]);
 
-        // Find the employee
-        $employee = Employee::findOrFail($id);
+        // Find the 
+        $employee = Auth::user()->clinic->employees->find($id);
 
         // Update employee details
         $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status']));
