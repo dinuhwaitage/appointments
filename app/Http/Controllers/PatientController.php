@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Employees\EmployeeDetailResource;
-use App\Http\Resources\Employees\EmployeeListResource;
+use App\Http\Resources\Patients\PatientDetailResource;
+use App\Http\Resources\Patients\PatientListResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Addresses\AddressDetailResource;
-use App\Models\Employee;
+
 use App\Models\Contact;
 use App\Models\Address;
+use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-class EmployeeController extends Controller
+class PatientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +22,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return EmployeeListResource::collection(Employee::where('designation', '!=', 'DOCTOR')->get());
+        return PatientListResource::collection(Patient::all());
     }
 
     /**
@@ -34,102 +35,99 @@ class EmployeeController extends Controller
     {
         // Validate the request
         $request->validate([
-            'code' => 'required|string|max:255',
-            'designation' => 'required|string|max:255',
-            'address' => 'required|array',
+            'description' => 'string|max:255',
+            'address' => 'array',
             'contact' => 'required|array'
         ]);
 
 
         $request['clinic_id'] = Auth::user()->clinic_id;
-        // Create the employee
-        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id']));
+        // Create the patient
+        $patient = Patient::create($request->only( ['description','status','clinic_id']));
 
 
         if ($request->has('contact')) {
-            // Attach the contact to the employee
+            // Attach the contact to the patient
             $contact = new Contact($request->contact);
-            $employee->contact()->save($contact);
+            $patient->contact()->save($contact);
         }
 
         if ($request->has('address')) {
-            // Attach the address to the employee
+            // Attach the address to the patient
             $address = new Address($request->address);
             $address->clinic_id =  Auth::user()->clinic_id;
-            $employee->address()->save($address);
+            $patient->address()->save($address);
         }
-        return response()->json($employee, 201);
-
+        return response()->json($patient, 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Employee  $employee
+     * @param  \App\Models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function show(Employee $employee)
+    public function show(Patient $patient)
     {
-        return new EmployeeDetailResource(Employee::findOrFail($id));
+        return new PatientDetailResource(Patient::findOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Employee  $employee
+     * @param  \App\Models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         // Validate the request
         $request->validate([
-            'code' => 'required|string|max:255',
-            'designation' => 'required|string|max:255',
-            'address' => 'required|array',
+            'description' => 'string|max:255',
+            'address' => 'array',
             'contact' => 'required|array'
         ]);
 
         // Find the employee
-        $employee = Employee::findOrFail($id);
+        $patient = Patient::findOrFail($id);
 
         // Update employee details
-        $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status']));
+        $patient->update($request->only( ['description','status']));
 
         // Update address details if provided
         if ($request->has('address')) {
             $addressData = $request->address;
             
-            if ($employee->address) {
-                $employee->address->update($addressData);
+            if ($patient->address) {
+                $patient->address->update($addressData);
             } else {
                 $address = new Address($addressData);
                 $address->clinic_id =  Auth::user()->clinic_id;
-                $employee->address()->save($address);
+                $patient->address()->save($address);
             }
         }
 
         // Update address details if provided
         if ($request->has('contact')) {
             $contactData = $request->contact;
-            if ($employee->contact) {
-                $employee->contact->update($contactData);
+            if ($patient->contact) {
+                $patient->contact->update($contactData);
             } else {
                 $contact = new Contact($contactData);
-                $employee->contact()->save($contact);
+                $patient->contact()->save($contact);
             }
         }
 
-        return response()->json($employee, 200);
+        return response()->json($patient, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Employee  $employee
+     * @param  \App\Models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy(Patient $patient)
     {
         //
     }
