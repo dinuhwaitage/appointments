@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
-    protected $fillable = ['code', 'date_of_birth','date_of_join', 'designation','qualification','status'];
+    protected $fillable = ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id'];
 
     public function clinic()
     {
@@ -20,8 +20,8 @@ class Employee extends Model
         return $this->morphOne(Contact::class, 'contactable');
     }
 
-    public function addresses()
+    public function address()
     {
-        return $this->morphMany(Address::class, 'addressable');
+        return $this->morphOne(Address::class, 'addressable');
     }
 }

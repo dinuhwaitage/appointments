@@ -33,9 +33,9 @@ class User extends Authenticatable
         return $this->morphOne(Contact::class, 'contactable');
     }
 
-    public function addresses()
+    public function address()
     {
-        return $this->morphMany(Address::class, 'addressable');
+        return $this->morphOne(Address::class, 'addressable');
     }
 
     /**

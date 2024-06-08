@@ -32,22 +32,33 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->clinic_id = Auth::user()->clinic_id;
-        // Create the employee
-        $employee = Employee::create($request);
+        // Validate the request
+        $request->validate([
+            'code' => 'required|string|max:255',
+            'designation' => 'required|string|max:255',
+            'address' => 'required|array',
+            'contact' => 'required|array'
+        ]);
 
-        if ($request->has('address')) {
-            // Attach the address to the employee
-            $address = new Address($request->address);
-            $employee->address()->save($address);
-        }
+
+        $request['clinic_id'] = Auth::user()->clinic_id;
+        // Create the employee
+        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id']));
+
 
         if ($request->has('contact')) {
             // Attach the contact to the employee
             $contact = new Contact($request->contact);
             $employee->contact()->save($contact);
         }
-        return response()->json($employee->load('address','contact'), 201);
+
+        if ($request->has('address')) {
+            // Attach the address to the employee
+            $address = new Address($request->address);
+            $address->clinic_id =  Auth::user()->clinic_id;
+            $employee->address()->save($address);
+        }
+        return response()->json($employee, 201);
 
     }
 
@@ -69,9 +80,47 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employee $employee)
+    public function update(Request $request, $id)
     {
-        //
+        // Validate the request
+        $request->validate([
+            'code' => 'required|string|max:255',
+            'designation' => 'required|string|max:255',
+            'address' => 'required|array',
+            'contact' => 'required|array'
+        ]);
+
+        // Find the employee
+        $employee = Employee::findOrFail($id);
+
+        // Update employee details
+        $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status']));
+
+        // Update address details if provided
+        if ($request->has('address')) {
+            $addressData = $request->address;
+            
+            if ($employee->address) {
+                $employee->address->update($addressData);
+            } else {
+                $address = new Address($addressData);
+                $address->clinic_id =  Auth::user()->clinic_id;
+                $employee->address()->save($address);
+            }
+        }
+
+        // Update address details if provided
+        if ($request->has('contact')) {
+            $contactData = $request->contact;
+            if ($employee->contact) {
+                $employee->contact->update($contactData);
+            } else {
+                $contact = new Contact($contactData);
+                $employee->contact()->save($contact);
+            }
+        }
+
+        return response()->json($employee, 200);
     }
 
     /**
