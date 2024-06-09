@@ -14,6 +14,15 @@ class DoctorListResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'code' => $this->code,
+            'date_of_birth' => $this->date_of_birth,
+            'code' => $this->code,
+            'code' => $this->code,
+            'contact' => $this->contact,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
+        ];
     }
 }
