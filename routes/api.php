@@ -18,15 +18,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware(['whitelist.host'])->group(function () {
+    
+    Route::post('login', [AuthController::class, 'login']);
 
-Route::post('login', [AuthController::class, 'login']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('register', [AuthController::class, 'register']);
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::apiResource('clinics', ClinicController::class);
+        Route::apiResource('employees', EmployeeController::class);
+        Route::apiResource('doctors', DoctorController::class);
+        Route::apiResource('patients', PatientController::class);
+    });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::apiResource('clinics', ClinicController::class);
-    Route::apiResource('employees', EmployeeController::class);
-    Route::apiResource('doctors', DoctorController::class);
-    Route::apiResource('patients', PatientController::class);
 });
 
