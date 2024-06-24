@@ -19,6 +19,7 @@ class WhitelistHost
         // Define your whitelisted hosts
         $whitelistedHosts = [
             'localhost:3000',
+            'localhost:3001',
             'appointments.coderkeys.com'
         ];
 
