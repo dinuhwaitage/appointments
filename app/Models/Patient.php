@@ -24,4 +24,9 @@ class Patient extends Model
     {
         return $this->morphOne(Address::class, 'addressable');
     }
+
+    public function appoitments()
+    {
+        return $this->hasMany(Appointment::class, 'patient_id');
+    }
 }
