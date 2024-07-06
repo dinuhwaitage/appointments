@@ -151,8 +151,18 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
-        //
+         // Find the employee by ID
+         $employee = Auth::user()->clinic->employees->find($id);
+
+         // Perform any necessary cleanup (e.g., deleting related records)
+         // For example: $clinic->users()->delete(); if there are related users
+ 
+         // Delete the employee
+         $employee->delete();
+ 
+         // Return a JSON response
+         return response()->json(['message' => 'Employee deleted successfully'], 200);
     }
 }

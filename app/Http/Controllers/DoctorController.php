@@ -21,7 +21,8 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return DoctorListResource::collection(Employee::where('designation','=', 'DOCTOR')->get());
+        $doctors = Auth::user()->clinic->employees->where('designation', '=', 'DOCTOR');
+        return DoctorListResource::collection($doctors);
     }
 
     /**
@@ -128,8 +129,18 @@ class DoctorController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy( $id)
     {
-        //
+         // Find the doctor by ID
+         $doctor = Auth::user()->clinic->employees->where('designation', '=', 'DOCTOR')->find($id);
+
+         // Perform any necessary cleanup (e.g., deleting related records)
+         // For example: $clinic->users()->delete(); if there are related users
+ 
+         // Delete the doctor
+         $doctor->delete();
+ 
+         // Return a JSON response
+         return response()->json(['message' => 'Doctor deleted successfully'], 200);
     }
 }

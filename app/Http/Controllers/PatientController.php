@@ -127,8 +127,18 @@ class PatientController extends Controller
      * @param  \App\Models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Patient $patient)
+    public function destroy($id)
     {
-        //
+         // Find the patient by ID
+         $patient = Auth::user()->clinic->patients->find($id);
+
+         // Perform any necessary cleanup (e.g., deleting related records)
+         // For example: $clinic->users()->delete(); if there are related users
+ 
+         // Delete the patient
+         $patient->delete();
+ 
+         // Return a JSON response
+         return response()->json(['message' => 'Patient deleted successfully'], 200);
     }
 }

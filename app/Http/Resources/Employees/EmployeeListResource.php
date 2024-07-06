@@ -22,14 +22,14 @@ class EmployeeListResource extends JsonResource
             'designation' => $this->designation,
             'qualification' => $this->qualification,
             'contact' =>  [
-                'id' => $this->contact->id,
-                'first_name' => $this->contact->first_name,
-                'last_name' => $this->contact->last_name,
-                'email' => $this->contact->email,
-                'mobile' => $this->contact->mobile,
-                'status' => $this->contact->status,
-                'created_at' => $this->contact->created_at,
-                'updated_at' => $this->contact->updated_at
+                'id' => optional($this->contact)->id,
+                'first_name' => optional($this->contact)->first_name,
+                'last_name' => optional($this->contact)->last_name,
+                'email' => optional($this->contact)->email,
+                'mobile' => optional($this->contact)->mobile,
+                'status' => optional($this->contact)->status,
+                'created_at' => optional($this->contact)->created_at,
+                'updated_at' => optional($this->contact)->updated_at
             ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

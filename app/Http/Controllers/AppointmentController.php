@@ -88,8 +88,19 @@ class AppointmentController extends Controller
      * @param  \App\Models\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Appointment $appointment)
+    public function destroy($id)
     {
-        //
+         // Find the appointment by ID
+         $appointment = Auth::user()->clinic->appointments->find($id);
+
+
+         // Perform any necessary cleanup (e.g., deleting related records)
+         // For example: $clinic->users()->delete(); if there are related users
+ 
+         // Delete the appointment
+         $appointment->delete();
+ 
+         // Return a JSON response
+         return response()->json(['message' => 'Appointment deleted successfully'], 200);
     }
 }
