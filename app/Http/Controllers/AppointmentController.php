@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Resources\Appointments\AppointmentDetailResource;
 use App\Http\Resources\Appointments\AppointmentListResource;
+use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;

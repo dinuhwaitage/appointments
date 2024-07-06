@@ -18,9 +18,7 @@ class ClinicListResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'rooms' => RoomApiResource::collection($this->rooms),
-            'photos' => $this->photos
+            'updated_at' => $this->updated_at
         ];
     }
 }

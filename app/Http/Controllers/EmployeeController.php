@@ -7,9 +7,11 @@ use App\Http\Resources\Employees\EmployeeListResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Addresses\AddressDetailResource;
 use App\Models\Employee;
+use App\Models\User;
 use App\Models\Contact;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -33,25 +35,46 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
+        $clinic_id = Auth::user()->clinic_id; 
+        $request['email'] = $request->contact['email'];
+        $request['designation'] = "STAFF";
+        $request['clinic_id'] = $clinic_id;
         // Validate the request
         $request->validate([
+            'email' => 'required|email|unique:users,email,NULL,id,clinic_id,' . $clinic_id,
+            'password' => 'required|string|min:8',
             'code' => 'required|string|max:255',
             'designation' => 'required|string|max:255',
             'address' => 'required|array',
             'contact' => 'required|array'
         ]);
 
+        $user = User::create([
+            'name' => $request->contact['first_name']." ".$request->contact['last_name'],
+            'email' => $request->email,
+            'clinic_id' => Auth::user()->clinic_id,
+            'password' => Hash::make($request->password),
+        ]);
 
-        $request['clinic_id'] = Auth::user()->clinic_id;
-        // Create the employee
-        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id']));
-
+        // Update user details
+        $user->clinic_id = Auth::user()->clinic_id;
+        $user->update($user->only( ['clinic_id']));
 
         if ($request->has('contact')) {
             // Attach the contact to the employee
             $contact = new Contact($request->contact);
-            $employee->contact()->save($contact);
+            $user->contact()->save($contact);
         }
+
+        $request['contact_id'] = $user->contact->id;
+        // Create the employee
+        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id']));
+
+       /*  if ($request->has('contact')) {
+            // Attach the contact to the employee
+            $contact = new Contact($request->contact);
+            $employee->contact()->save($contact);
+        } */
 
         if ($request->has('address')) {
             // Attach the address to the employee
@@ -59,7 +82,7 @@ class EmployeeController extends Controller
             $address->clinic_id =  Auth::user()->clinic_id;
             $employee->address()->save($address);
         }
-        return response()->json($employee, 201);
+        return response()->json(new EmployeeDetailResource($employee), 201);
 
     }
 
@@ -87,9 +110,9 @@ class EmployeeController extends Controller
         // Validate the request
         $request->validate([
             'code' => 'required|string|max:255',
-            'designation' => 'required|string|max:255',
-            'address' => 'required|array',
-            'contact' => 'required|array'
+           // 'designation' => 'required|string|max:255',
+            'address' => 'required|array'
+            //'contact' => 'required|array'
         ]);
 
         // Find the 
@@ -116,9 +139,6 @@ class EmployeeController extends Controller
             $contactData = $request->contact;
             if ($employee->contact) {
                 $employee->contact->update($contactData);
-            } else {
-                $contact = new Contact($contactData);
-                $employee->contact()->save($contact);
             }
         }
 

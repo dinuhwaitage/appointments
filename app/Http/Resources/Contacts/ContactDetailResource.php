@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Contacs;
+namespace App\Http\Resources\Contacts;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,8 +21,6 @@ class ContactDetailResource extends JsonResource
             'email' => $this->email,
             'mobile' => $this->mobile,
             'status' => $this->status,
-            'contact' => $this->contact,
-            'address' => $this->address,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];
