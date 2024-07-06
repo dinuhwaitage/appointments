@@ -93,7 +93,6 @@ class AppointmentController extends Controller
          // Find the appointment by ID
          $appointment = Auth::user()->clinic->appointments->find($id);
 
-
          // Perform any necessary cleanup (e.g., deleting related records)
          // For example: $clinic->users()->delete(); if there are related users
  

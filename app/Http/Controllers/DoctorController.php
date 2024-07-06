@@ -7,9 +7,11 @@ use App\Http\Resources\Doctors\DoctorListResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Address\AddressDetailResource;
 use App\Models\Employee;
+use App\Models\User;
 use App\Models\Contact;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
@@ -33,25 +35,40 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
+        $clinic_id = Auth::user()->clinic_id; 
+        $request['email'] = $request->contact['email'];
+        $request['designation'] = "DOCTOR";
+        $request['clinic_id'] = $clinic_id;
          // Validate the request
          $request->validate([
+            'email' => 'required|email|unique:users,email,NULL,id,clinic_id,' . $clinic_id,
+            'password' => 'required|string|min:8',
             'code' => 'required|string|max:255',
             'address' => 'required|array',
             'contact' => 'required|array'
         ]);
 
+        $user = User::create([
+            'name' => $request->contact['first_name']." ".$request->contact['last_name'],
+            'email' => $request->email,
+            'clinic_id' => $clinic_id,
+            'password' => Hash::make($request->password),
+        ]);
 
-        $request['clinic_id'] = Auth::user()->clinic_id;
-        $request['designation'] = 'DOCTOR';
-        // Create the employee
-        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id']));
-
+        // Update user details
+        $user->clinic_id = Auth::user()->clinic_id;
+        $user->update($user->only( ['clinic_id']));
 
         if ($request->has('contact')) {
-            // Attach the contact to the employee
+            //Attach the contact to the employee
             $contact = new Contact($request->contact);
-            $employee->contact()->save($contact);
+            $user->contact()->save($contact);
         }
+
+        $request['contact_id'] = $user->contact->id;
+
+        // Create the employee
+        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id']));
 
         if ($request->has('address')) {
             // Attach the address to the employee
