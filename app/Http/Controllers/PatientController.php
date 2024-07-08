@@ -6,12 +6,13 @@ use App\Http\Resources\Patients\PatientDetailResource;
 use App\Http\Resources\Patients\PatientListResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Addresses\AddressDetailResource;
-
+use App\Models\User;
 use App\Models\Contact;
 use App\Models\Address;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class PatientController extends Controller
 {
@@ -33,24 +34,38 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
+        $clinic_id = Auth::user()->clinic_id; 
+        $request['email'] = $request->contact['email'];
+        $request['clinic_id'] = $clinic_id;
+
         // Validate the request
         $request->validate([
+            'email' => 'required|email|unique:users,email,NULL,id,clinic_id,' . $clinic_id,
+            'password' => 'string|min:8',
             'description' => 'string|max:255',
             'address' => 'array',
             'contact' => 'required|array'
         ]);
+        $pass = $request->password ? $request->password : 'Test@1234';
+        $user = User::create([
+            'name' => $request->contact['first_name']." ".$request->contact['last_name'],
+            'email' => $request->email,
+            'clinic_id' => $clinic_id,
+            'password' => Hash::make($pass),
+        ]);
+
+        if ($request->has('contact')) {
+            //Attach the contact to the employee
+            $contact = new Contact($request->contact);
+            $user->contact()->save($contact);
+        }
+
+        $request['contact_id'] = $user->contact->id;
 
 
         $request['clinic_id'] = Auth::user()->clinic_id;
         // Create the patient
-        $patient = Patient::create($request->only( ['description','status','clinic_id']));
-
-
-        if ($request->has('contact')) {
-            // Attach the contact to the patient
-            $contact = new Contact($request->contact);
-            $patient->contact()->save($contact);
-        }
+        $patient = Patient::create($request->only( ['description','status','clinic_id','contact_id']));
 
         if ($request->has('address')) {
             // Attach the address to the patient
