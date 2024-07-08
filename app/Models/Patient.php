@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Patient extends Model
 {
     use HasFactory;
-    protected $fillable = ['description', 'status','clinic_id'];
+    protected $fillable = ['description', 'status','clinic_id','contact_id'];
 
     public function clinic()
     {
@@ -17,7 +17,7 @@ class Patient extends Model
 
     public function contact()
     {
-        return $this->morphOne(Contact::class, 'contactable');
+        return $this->belongsTo(Contact::class);
     }
 
     public function address()

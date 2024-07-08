@@ -55,10 +55,6 @@ class DoctorController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Update user details
-        $user->clinic_id = Auth::user()->clinic_id;
-        $user->update($user->only( ['clinic_id']));
-
         if ($request->has('contact')) {
             //Attach the contact to the employee
             $contact = new Contact($request->contact);
