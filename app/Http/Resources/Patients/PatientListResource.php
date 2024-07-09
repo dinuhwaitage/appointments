@@ -21,7 +21,7 @@ class PatientListResource extends JsonResource
                 'id' => optional($this->contact)->id,
                 'first_name' => optional($this->contact)->first_name,
                 'last_name' => optional($this->contact)->last_name,
-                'email' => optional($this->contact)->email,
+                'date_of_birth' => optional($this->contact)->date_of_birth,
                 'mobile' => optional($this->contact)->mobile,
                 'status' => optional($this->contact)->status,
                 'created_at' => optional($this->contact)->created_at,

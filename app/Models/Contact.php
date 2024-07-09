@@ -15,4 +15,14 @@ class Contact extends Model
     {
         return $this->morphTo();
     }
+
+    public function patient()
+    {
+        return $this->hasOne(Patient::class, 'contact_id');
+    }
+
+    public function employee()
+    {
+        return $this->hasOne(Employee::class, 'contact_id');
+    }
 }

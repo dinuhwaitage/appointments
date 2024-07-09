@@ -16,6 +16,15 @@ use Illuminate\Support\Facades\Hash;
 
 class PatientController extends Controller
 {
+    public function generateRandomString($length = 5) {
+        // Define the character set to use
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        // Shuffle the character set
+        $characters = str_shuffle($characters);
+        // Return the first $length characters of the shuffled set
+        return substr($characters, 0, $length);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,14 +44,20 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         $clinic_id = Auth::user()->clinic_id; 
-        $request['email'] = $request->contact['email'];
+        if($request->has('contact') && $request->contact && optional($request->input('contact'))['email']){
+            $request['email'] = $request->contact['email'];
+        }else{
+            // Generate a 5-character random string
+            $request['email'] = $request->contact['first_name'].$this->generateRandomString(10)."@gmail.com";
+        }
         $request['clinic_id'] = $clinic_id;
 
         // Validate the request
         $request->validate([
-            'email' => 'required|email|unique:users,email,NULL,id,clinic_id,' . $clinic_id,
+            'email' => 'email|unique:users,email,NULL,id,clinic_id,' . $clinic_id,
             'password' => 'string|min:8',
             'description' => 'string|max:255',
+            'date_of_birth' => 'date',
             'address' => 'array',
             'contact' => 'required|array'
         ]);
@@ -62,10 +77,9 @@ class PatientController extends Controller
 
         $request['contact_id'] = $user->contact->id;
 
-
         $request['clinic_id'] = Auth::user()->clinic_id;
         // Create the patient
-        $patient = Patient::create($request->only( ['description','status','clinic_id','contact_id']));
+        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id']));
 
         if ($request->has('address')) {
             // Attach the address to the patient
