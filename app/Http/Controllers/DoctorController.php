@@ -44,7 +44,7 @@ class DoctorController extends Controller
             'email' => 'required|email|unique:users,email,NULL,id,clinic_id,' . $clinic_id,
             'password' => 'required|string|min:8',
             'code' => 'required|string|max:255',
-            'address' => 'required|array',
+            'address' => 'array',
             'contact' => 'required|array'
         ]);
 
