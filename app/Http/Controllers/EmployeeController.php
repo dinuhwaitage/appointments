@@ -64,7 +64,7 @@ class EmployeeController extends Controller
 
         $request['contact_id'] = $user->contact->id;
         // Create the employee
-        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id']));
+        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id','gender']));
 
        /*  if ($request->has('contact')) {
             // Attach the contact to the employee
@@ -115,7 +115,7 @@ class EmployeeController extends Controller
         $employee = Auth::user()->clinic->employees->find($id);
 
         // Update employee details
-        $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status']));
+        $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','gender']));
 
         // Update address details if provided
         if ($request->has('address')) {

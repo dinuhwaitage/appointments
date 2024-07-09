@@ -16,6 +16,7 @@ class PatientListResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'gender' => $this->gender,
             'description' => $this->description,
             'contact' =>   [
                 'id' => optional($this->contact)->id,

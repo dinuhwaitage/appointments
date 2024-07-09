@@ -64,7 +64,7 @@ class DoctorController extends Controller
         $request['contact_id'] = $user->contact->id;
 
         // Create the employee
-        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id']));
+        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id','gender']));
 
         if ($request->has('address')) {
             // Attach the address to the employee
@@ -107,7 +107,7 @@ class DoctorController extends Controller
         $employee = Auth::user()->clinic->employees->find($id);
 
         // Update employee details
-        $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'qualification','status']));
+        $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'qualification','status','gender']));
 
         // Update address details if provided
         if ($request->has('address')) {
@@ -127,10 +127,7 @@ class DoctorController extends Controller
             $contactData = $request->contact;
             if ($employee->contact) {
                 $employee->contact->update($contactData);
-            } else {
-                $contact = new Contact($contactData);
-                $employee->contact()->save($contact);
-            }
+            } 
         }
 
         return response()->json($employee, 200);
