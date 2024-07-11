@@ -20,6 +20,7 @@ class DoctorDetailResource extends JsonResource
             'gender' => $this->gender,
             'date_of_birth' => $this->date_of_birth,
             'date_of_join' => $this->date_of_join,
+            'specification'=> $this->specification,
             'designation' => $this->designation,
             'qualification' => $this->qualification,
             'contact' =>  [
