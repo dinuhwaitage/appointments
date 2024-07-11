@@ -43,7 +43,7 @@ class DoctorController extends Controller
          $request->validate([
             'email' => 'required|email|unique:users,email,NULL,id,clinic_id,' . $clinic_id,
             'password' => 'required|string|min:8',
-            'code' => 'required|string|max:255',
+            'code' => 'string|max:255',
             'address' => 'array',
             'contact' => 'required|array'
         ]);
@@ -64,7 +64,7 @@ class DoctorController extends Controller
         $request['contact_id'] = $user->contact->id;
 
         // Create the employee
-        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id','gender']));
+        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id','gender','specification']));
 
         if ($request->has('address')) {
             // Attach the address to the employee
@@ -98,7 +98,7 @@ class DoctorController extends Controller
     {
         // Validate the request
         $request->validate([
-            'code' => 'required|string|max:255',
+            'code' => 'string|max:255',
             'address' => 'array',
             'contact' => 'array'
         ]);
@@ -107,7 +107,7 @@ class DoctorController extends Controller
         $employee = Auth::user()->clinic->employees->find($id);
 
         // Update employee details
-        $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'qualification','status','gender']));
+        $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'qualification','status','gender','specification']));
 
         // Update address details if provided
         if ($request->has('address')) {
