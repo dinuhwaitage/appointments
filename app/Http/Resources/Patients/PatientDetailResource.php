@@ -17,6 +17,7 @@ class PatientDetailResource extends JsonResource
         return [
             'id' => $this->id,
             'description' => $this->description,
+            'gender' => $this->gender,
             'contact' =>   [
                 'id' => optional($this->contact)->id,
                 'first_name' => optional($this->contact)->first_name,
