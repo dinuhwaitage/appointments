@@ -15,9 +15,9 @@ class UpdateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->string('details');
-            $table->date('date');
-            $table->time('time');
+            $table->string('details')->nullable();
+            $table->date('date')->nullable();
+            $table->time('time')->nullable();
             $table->enum('status', ['ACTIVE', 'INACTIVE'])->default('ACTIVE');
             $table->unsignedBigInteger('patient_id');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
