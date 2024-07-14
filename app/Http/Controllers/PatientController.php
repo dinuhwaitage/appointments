@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Contact;
 use App\Models\Address;
 use App\Models\Patient;
+use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -32,7 +33,8 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return PatientListResource::collection(Patient::all());
+        $patients = Auth::user()->clinic->patients;
+        return PatientListResource::collection($patients);
     }
 
     /**
@@ -96,8 +98,9 @@ class PatientController extends Controller
      * @param  \App\Models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function show(Patient $patient)
+    public function show($id)
     {
+        $patient = Auth::user()->clinic->patients->find($id);
         return new PatientDetailResource($patient);
     }
 
@@ -117,10 +120,10 @@ class PatientController extends Controller
             'contact' => 'required|array'
         ]);
 
-        // Find the employee
-        $patient = Patient::findOrFail($id);
+        // Find the patient
+        $patient = Auth::user()->clinic->patients->find($id);
 
-        // Update employee details
+        // Update patient details
         $patient->update($request->only( ['description','status','gender']));
 
         // Update address details if provided

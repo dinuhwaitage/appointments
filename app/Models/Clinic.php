@@ -34,4 +34,9 @@ class Clinic extends Model
     {
         return $this->morphMany(Address::class, 'addressable');
     }
+
+    public function packages()
+    {
+        return $this->hasMany(Package::class, 'clinic_id');
+    }
 }

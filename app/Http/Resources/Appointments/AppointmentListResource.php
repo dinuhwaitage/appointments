@@ -21,14 +21,22 @@ class AppointmentListResource extends JsonResource
             'details' => $this->details,
             'status' => $this->status,
             'patient' =>[ 
-                'id' =>  $this->patient->id,
-                'name' => optional($this->patient->contact)->first_name." ".optional($this->patient->contact)->last_name,
+                'id' =>  optional($this->patient)->id,
+                'name' => optional(optional($this->patient)->contact)->first_name." ".optional(optional($this->patient)->contact)->last_name,
             ],
             'doctor' => [ 
-                'id' =>  $this->doctor->id,
-                'name' => optional($this->doctor->contact)->first_name." ".optional($this->doctor->contact)->last_name,
+                'id' =>  optional($this->doctor)->id,
+                'name' => optional(optional($this->doctor)->contact)->first_name." ".optional(optional($this->doctor)->contact)->last_name,
             ],
-            'clinic' => $this->clinic,
+            'package' =>[
+                'id' => optional($this->package)->id,
+                'name' => optional($this->package)->name,
+                'amount' => optional($this->package)->amount
+            ],
+            'clinic' =>[
+                'id' => $this->clinic->id,
+                'name' => $this->clinic->name
+            ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];
