@@ -17,6 +17,7 @@ class CreatePatientsTable extends Migration
             $table->id();
             $table->string('description')->nullable();
             $table->enum('status', ['ACTIVE', 'INACTIVE'])->default('ACTIVE');
+            $table->date('date_of_birth')->nullable();
             $table->unsignedBigInteger('clinic_id');
             $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
             $table->timestamps();

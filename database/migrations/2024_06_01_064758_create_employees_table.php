@@ -20,6 +20,7 @@ class CreateEmployeesTable extends Migration
             $table->date('date_of_join')->nullable();
             $table->string('designation')->nullable();
             $table->string('qualification')->nullable();
+            $table->string('specification')->nullable();
             $table->enum('status', ['ACTIVE', 'INACTIVE'])->default('ACTIVE');
             $table->unsignedBigInteger('clinic_id');
             $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
