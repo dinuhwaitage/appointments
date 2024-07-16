@@ -39,4 +39,9 @@ class Clinic extends Model
     {
         return $this->hasMany(Package::class, 'clinic_id');
     }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'clinic_id');
+    }
 }
