@@ -8,6 +8,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,7 @@ Route::middleware(['whitelist.host'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::apiResource('clinics', ClinicController::class);
         Route::apiResource('packages', PackageController::class);
+        Route::apiResource('invoices', InvoiceController::class);
         Route::apiResource('employees', EmployeeController::class);
         Route::apiResource('doctors', DoctorController::class);
         Route::apiResource('patients', PatientController::class);
