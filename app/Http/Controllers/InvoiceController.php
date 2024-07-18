@@ -16,9 +16,15 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $patient_id = $request->input('patient_id');
         $invoices = Auth::user()->clinic->invoices;
+
+        if($patient_id){
+            $invoices = $invoices->where('patient_id', $patient_id);
+        }
+
         return InvoiceListResource::collection($invoices);
     }
 

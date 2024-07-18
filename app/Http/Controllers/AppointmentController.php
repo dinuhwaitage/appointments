@@ -15,9 +15,20 @@ class AppointmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+       
+        $patient_id = $request->input('patient_id');
+        $doctor_id = $request->input('doctor_id');
         $appointments = Auth::user()->clinic->appointments;
+     
+        if($doctor_id){
+            $appointments = $appointments->where('doctor_id', $doctor_id);
+        }
+
+        if($patient_id){
+            $appointments = $appointments->where('patient_id', $patient_id);
+        }
         return AppointmentListResource::collection($appointments);
     }
 
