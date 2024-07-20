@@ -22,7 +22,9 @@ class UserDetailResource extends JsonResource
                 'last_name' => $this->contact->last_name,
                 'email' => $this->contact->email,
                 'mobile' => $this->contact->mobile,
-                'status' => $this->contact->status
+                'status' => $this->contact->status,
+                'role' => $this->contact->firstRole(),
+                'permissions' => $this->contact->role_permissions()
             ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

@@ -33,6 +33,19 @@ class Contact extends Model
 
     public function roles()
     {
-        return $this->hasMany(ContactRole::class, 'contact_id');
+        return $this->belongsToMany(Role::class, 'contact_roles');
+    }
+
+    public function role_permissions()
+    { $arr = [];
+        foreach($this->roles as $role){
+            $arr = array_merge($arr, $role->serialize_permission());
+        }
+        return collect($arr);
+    }
+
+    public function firstRole()
+    {
+        return $this->roles()->first()->name;
     }
 }

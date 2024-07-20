@@ -14,9 +14,19 @@ use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\ContactController;
 
 class PatientController extends Controller
 {
+
+    protected $contactController;
+
+    // Inject the ContactController
+    public function __construct(ContactController $contactController)
+    {
+        $this->contactController = $contactController;
+    }
+
     public function generateRandomString($length = 5) {
         // Define the character set to use
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -75,6 +85,9 @@ class PatientController extends Controller
             //Attach the contact to the employee
             $contact = new Contact($request->contact);
             $user->contact()->save($contact);
+
+             // You can call the addRoleToContact method directly
+             $this->contactController->addRoleToContact($user->contact, 'PATIENT');
         }
 
         $request['contact_id'] = $user->contact->id;
