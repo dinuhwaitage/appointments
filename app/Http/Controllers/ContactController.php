@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Users\UserDetailResource;
 use App\Models\Contact;
+use App\Models\Role;
+use App\Models\ContactRole;
 use App\Exceptions\CustomException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -81,5 +83,21 @@ class ContactController extends Controller
     public function destroy(Contact $contact)
     {
         //
+    }
+
+       /**
+     * Attach a role to a contact.
+     *
+     * @param model $contact
+     * @param name $role_name
+     * @return \Illuminate\Http\Response
+     */
+    public function addRoleToContact($contact, $role_name)
+    {
+
+        //fine role by name
+        $role = Role::where('name', $role_name)->get()->first();
+         // Attach the role to the contact
+         $contact->roles()->attach($role);
     }
 }

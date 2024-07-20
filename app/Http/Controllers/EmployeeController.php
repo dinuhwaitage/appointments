@@ -9,13 +9,25 @@ use App\Http\Resources\Addresses\AddressDetailResource;
 use App\Models\Employee;
 use App\Models\User;
 use App\Models\Contact;
+use App\Models\Role;
+use App\Models\ContactRole;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Http\Controllers\ContactController;
 
 class EmployeeController extends Controller
 {
+
+    protected $contactController;
+
+    // Inject the ContactController
+    public function __construct(ContactController $contactController)
+    {
+        $this->contactController = $contactController;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -60,6 +72,9 @@ class EmployeeController extends Controller
             // Attach the contact to the employee
             $contact = new Contact($request->contact);
             $user->contact()->save($contact);
+
+             // You can call the addRoleToContact method directly
+             $this->contactController->addRoleToContact($user->contact, 'STAFF');
         }
 
         $request['contact_id'] = $user->contact->id;
@@ -160,5 +175,26 @@ class EmployeeController extends Controller
  
          // Return a JSON response
          return response()->json(['message' => 'Employee deleted successfully'], 200);
+    }
+
+     /**
+     * Attach a role to a contact.
+     *
+     * @param model $contact
+     * @param name $role_name
+     * @return \Illuminate\Http\Response
+     */
+    public function attachRoleToContact($contact, $role_name)
+    {
+
+        //fine role by name
+        $role = Role::where('name', $role_name)->get()->first();
+
+       // Manually create the record in the contact_role table
+       $cotact_role = ContactRole::create([
+            'contact_id' => $contact->id,
+            'role_id' => $role->id
+        ]);
+        //return response()->json(['message' => 'Role attached to contact successfully.']);
     }
 }

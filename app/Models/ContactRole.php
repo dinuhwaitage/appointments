@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContactRole extends Model
 {
+    protected $fillable = ['contact_id', 'role_id'];
     use HasFactory;
+    
 
     public function role()
     {

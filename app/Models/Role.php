@@ -9,6 +9,17 @@ class Role extends Model
 {
     use HasFactory;
 
+    public function serialize_permission(){
+        $arr =[];
+        $permissions = $this->permissions();
+        foreach($permissions as $key => $permission){
+            foreach($permissions[$key] as $val){
+                array_push($arr, $val."".$key);
+            }
+        }
+        return $arr;
+    }
+
     public function permissions()
     {
         if ($this->name == 'STAFF'){
@@ -31,5 +42,10 @@ class Role extends Model
             ];
         }
 
+    }
+
+    public function contacts()
+    {
+        return $this->belongsToMany(Contact::class, 'contact_roles');
     }
 }
