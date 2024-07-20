@@ -50,7 +50,7 @@ class AppointmentController extends Controller
 
         $request['clinic_id'] = Auth::user()->clinic_id;
         // Create the appointment
-        $appointment = Appointment::create($request->only( ['details','date','time','patient_id','doctor_id', 'status','clinic_id','package_id']));
+        $appointment = Appointment::create($request->only( ['details','date','time','patient_id','doctor_id', 'status','clinic_id','package_id','diagnosis']));
 
         return response()->json($appointment, 201);
     }
@@ -78,16 +78,15 @@ class AppointmentController extends Controller
     {
          // Validate the request
          $request->validate([
-            'details' => 'required|string|max:255',
-            'date' => 'required|date',
-            'patient_id' => 'required'
+            'details' => 'string|max:255',
+            'date' => 'date',
         ]);
 
           // Find the 
           $appointment = Auth::user()->clinic->appointments->find($id);
 
           // Update employee details
-          $appointment->update($request->only( ['date', 'time','details','status','doctor_id','package_id']));
+          $appointment->update($request->only( ['date', 'time','details','status','doctor_id','package_id','diagnosis']));
 
           return response()->json($appointment, 200);
   

@@ -20,13 +20,14 @@ class AppointmentDetailResource extends JsonResource
             'time' => $this->time,
             'details' => $this->details,
             'status' => $this->status,
+            'diagnosis' => $this->diagnosis,
             'patient' =>[ 
                 'id' =>  optional($this->patient)->id,
-                'name' => optional($this->patient->contact)->first_name." ".optional($this->patient->contact)->last_name,
+                'name' => optional($this->patient->contact)->getFullName(),
             ],
             'doctor' => [ 
                 'id' =>  optional($this->doctor)->id,
-                'name' => optional($this->doctor->contact)->first_name." ".optional($this->doctor->contact)->last_name,
+                'name' => optional($this->doctor->contact)->getFullName(),
             ],
             'package' =>[
                 'id' => optional($this->package)->id,
