@@ -25,4 +25,14 @@ class Contact extends Model
     {
         return $this->hasOne(Employee::class, 'contact_id');
     }
+
+    public function getFullName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function roles()
+    {
+        return $this->hasMany(ContactRole::class, 'contact_id');
+    }
 }
