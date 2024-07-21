@@ -54,8 +54,8 @@ class EmployeeController extends Controller
             'email' => 'required|email|unique:users,email,NULL,id,clinic_id,' . $clinic_id,
             'password' => 'required|string|min:8',
             'code' => 'required|string|max:255',
-            'designation' => 'required|string|max:255',
-            'address' => 'required|array',
+            'designation' => 'string|max:255',
+            'address' => 'array',
             'contact' => 'required|array'
         ]);
 
@@ -120,7 +120,7 @@ class EmployeeController extends Controller
         $request->validate([
             'code' => 'required|string|max:255',
            // 'designation' => 'required|string|max:255',
-            'address' => 'required|array'
+            'address' => 'array'
             //'contact' => 'required|array'
         ]);
 
