@@ -33,7 +33,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Auth::user()->clinic->employees->where('designation', '!=', 'DOCTOR');
+        $employees = Auth::user()->clinic->employees->where('employee_type', '=', 'STAFF');
         return EmployeeListResource::collection($employees);
     }
 
@@ -47,7 +47,7 @@ class EmployeeController extends Controller
     {
         $clinic_id = Auth::user()->clinic_id; 
         $request['email'] = $request->contact['email'];
-        $request['designation'] = "STAFF";
+        $request['employee_type'] = "STAFF";
         $request['clinic_id'] = $clinic_id;
         // Validate the request
         $request->validate([
@@ -77,13 +77,7 @@ class EmployeeController extends Controller
 
         $request['contact_id'] = $user->contact->id;
         // Create the employee
-        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id','gender']));
-
-       /*  if ($request->has('contact')) {
-            // Attach the contact to the employee
-            $contact = new Contact($request->contact);
-            $employee->contact()->save($contact);
-        } */
+        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id','gender','employee_type']));
 
         if ($request->has('address')) {
             // Attach the address to the employee
@@ -103,7 +97,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        $employee = Auth::user()->clinic->employees->find($id);
+        $employee = Auth::user()->clinic->employees->where('employee_type', '=', 'STAFF')->find($id);
         return new EmployeeDetailResource($employee);
     }
 
@@ -124,8 +118,8 @@ class EmployeeController extends Controller
             //'contact' => 'required|array'
         ]);
 
-        // Find the 
-        $employee = Auth::user()->clinic->employees->find($id);
+        // Find the
+        $employee = Auth::user()->clinic->employees->where('employee_type', '=', 'STAFF')->find($id); 
 
         // Update employee details
         $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','gender']));
@@ -163,7 +157,7 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
          // Find the employee by ID
-         $employee = Auth::user()->clinic->employees->find($id);
+         $employee = Auth::user()->clinic->employees->where('employee_type', '=', 'STAFF')->find($id);
 
          // Perform any necessary cleanup (e.g., deleting related records)
          // For example: $clinic->users()->delete(); if there are related users

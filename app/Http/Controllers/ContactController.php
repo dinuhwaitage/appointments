@@ -94,7 +94,6 @@ class ContactController extends Controller
      */
     public function addRoleToContact($contact, $role_name)
     {
-
         //fine role by name
         $role = Role::where('name', $role_name)->get()->first();
          // Attach the role to the contact

@@ -31,7 +31,7 @@ Route::middleware(['whitelist.host'])->group(function () {
         Route::get('/invoices/reports', [InvoiceController::class, 'reports']);
         Route::get('user', [UserController::class, 'user']);
         Route::patch('user_update/{id}', [ContactController::class, 'update']);
-        Route::post('register', [AuthController::class, 'register']);
+        Route::post('/users/admin_user', [UserController::class, 'admin_user']);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::apiResource('clinics', ClinicController::class);
         Route::apiResource('packages', PackageController::class);

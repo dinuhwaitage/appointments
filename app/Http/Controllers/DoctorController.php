@@ -32,7 +32,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        $doctors = Auth::user()->clinic->employees->where('designation', '=', 'DOCTOR');
+        $doctors = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR');
         return DoctorListResource::collection($doctors);
     }
 
@@ -46,7 +46,7 @@ class DoctorController extends Controller
     {
         $clinic_id = Auth::user()->clinic_id; 
         $request['email'] = $request->contact['email'];
-        $request['designation'] = "DOCTOR";
+        $request['employee_type'] = "DOCTOR";
         $request['clinic_id'] = $clinic_id;
          // Validate the request
          $request->validate([
@@ -75,7 +75,7 @@ class DoctorController extends Controller
         $request['contact_id'] = $user->contact->id;
 
         // Create the employee
-        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id','gender','specification']));
+        $employee = Employee::create($request->only( ['code', 'date_of_birth','date_of_join', 'designation','qualification','status','clinic_id','contact_id','gender','specification','employee_type']));
 
         if ($request->has('address')) {
             // Attach the address to the employee
@@ -94,8 +94,8 @@ class DoctorController extends Controller
      */
     public function show($id)
     {
-        $employee = Auth::user()->clinic->employees->find($id);
-        return new DoctorDetailResource($employee);
+        $doctor = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR')->find($id);
+        return new DoctorDetailResource($doctor);
     }
 
     /**
@@ -114,8 +114,8 @@ class DoctorController extends Controller
             'contact' => 'array'
         ]);
 
-        // Find the 
-        $employee = Auth::user()->clinic->employees->find($id);
+        // Find the
+        $employee = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR')->find($id);
 
         // Update employee details
         $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'qualification','status','gender','specification']));
@@ -153,7 +153,7 @@ class DoctorController extends Controller
     public function destroy( $id)
     {
          // Find the doctor by ID
-         $doctor = Auth::user()->clinic->employees->where('designation', '=', 'DOCTOR')->find($id);
+         $doctor = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR')->find($id);
 
          // Perform any necessary cleanup (e.g., deleting related records)
          // For example: $clinic->users()->delete(); if there are related users
