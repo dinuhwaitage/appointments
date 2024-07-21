@@ -46,6 +46,6 @@ class Contact extends Model
 
     public function firstRole()
     {
-        return $this->roles()->first()->name;
+        return optional(optional($this->roles())->first())->name;
     }
 }
