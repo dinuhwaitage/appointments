@@ -28,6 +28,7 @@ Route::middleware(['whitelist.host'])->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/invoices/reports', [InvoiceController::class, 'reports']);
         Route::get('user', [UserController::class, 'user']);
         Route::patch('user_update/{id}', [ContactController::class, 'update']);
         Route::post('register', [AuthController::class, 'register']);

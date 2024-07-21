@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Invoices\InvoiceDetailResource;
 use App\Http\Resources\Invoices\InvoiceListResource;
+use App\Http\Resources\Invoices\ReportResource;
 use App\Models\User;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
@@ -103,5 +104,47 @@ class InvoiceController extends Controller
 
         // Return a JSON response
         return response()->json(['message' => 'Invoice deleted successfully'], 200);
+    }
+
+       /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function reports(Request $request)
+    {
+         // Validate the request data
+         $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'patient_id' => 'nullable|integer',
+        ]);
+       
+
+        // Get the start and end date from the request
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+        $patient_id = $request->query('patient_id');
+
+        // Build the query
+        $query = Invoice::query();
+
+        $query->where('clinic_id', '=', Auth::user()->clinic_id);
+
+        if($patient_id){
+            $query->where('patient_id', '=', $patient_id);
+        }
+
+        if ($startDate) {
+            $query->where('payment_date', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->where('payment_date', '<=', $endDate);
+        }
+
+        // Get the filtered invoices
+        $invoices = $query->get();
+        return ReportResource::collection($invoices);
     }
 }
