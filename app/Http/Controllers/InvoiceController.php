@@ -7,6 +7,8 @@ use App\Http\Resources\Invoices\InvoiceListResource;
 use App\Http\Resources\Invoices\ReportResource;
 use App\Models\User;
 use App\Models\Invoice;
+use App\Models\Patient;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -146,5 +148,58 @@ class InvoiceController extends Controller
         // Get the filtered invoices
         $invoices = $query->get();
         return ReportResource::collection($invoices);
+    }
+
+    /**
+     * Display a stats of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function stats(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'days' => 'nullable|integer',
+            // Add other filters if needed
+        ]);
+        $days = $request->query('days') ? $request->query('days') : 30;
+        $endDate = now();
+        $startDate = now()->subDays($days); $endDate = now();
+        
+
+       // Build the query
+       $query = Invoice::query();
+       $patient_query = Patient::query();
+       $appointment_query = Appointment::query();
+
+       $query->where('clinic_id', '=', Auth::user()->clinic_id);
+       $patient_query->where('clinic_id', '=', Auth::user()->clinic_id);
+       $appointment_query->where('clinic_id', '=', Auth::user()->clinic_id);
+       
+        if ($startDate) {
+            $query->where('payment_date', '>=', $startDate);
+            $patient_query->where('created_at', '>=', $startDate);
+            $appointment_query->where('created_at', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->where('payment_date', '<=', $endDate);
+            $patient_query->where('created_at', '<=', $endDate);
+            $appointment_query->where('created_at', '<=', $endDate);
+        }
+        // Get the filtered invoices
+        $invoices = $query->get();
+        $patients = $patient_query->get();
+        $appointments = $appointment_query->get();
+
+        // Generate the report (this can be customized as needed)
+        $stats = [
+            'total_appointments' => $appointments->count(),
+            'total_patients' => $patients->count(),
+            'total_invoices' => $invoices->count(),
+            'total_amount' => $invoices->sum('amount')
+        ];
+
+        return response()->json($stats);
     }
 }
