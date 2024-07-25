@@ -192,9 +192,9 @@ class InvoiceController extends Controller
         $online_inv_query = clone  $query;
         $check_inv_query = clone  $query;
 
-        $cash_inv_query->where('paid_by', '=', 'CASH');
-        $online_inv_query->where('paid_by', '=', 'ONLINE');
-        $check_inv_query->where('paid_by', '=', 'CHECK');
+        $cash_inv_query->where('paid_by', '=', 'Cash');
+        $online_inv_query->where('paid_by', '=', 'Online');
+        $check_inv_query->where('paid_by', '=', 'Cheque');
 
         $cash_invoices = $cash_inv_query->get();
         $online_invoices = $online_inv_query->get();
