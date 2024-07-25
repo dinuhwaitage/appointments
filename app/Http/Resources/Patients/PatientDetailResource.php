@@ -18,11 +18,11 @@ class PatientDetailResource extends JsonResource
             'id' => $this->id,
             'description' => $this->description,
             'gender' => $this->gender,
+            'date_of_birth' => $this->date_of_birth,
             'contact' =>   [
                 'id' => optional($this->contact)->id,
                 'first_name' => optional($this->contact)->first_name,
                 'last_name' => optional($this->contact)->last_name,
-                'date_of_birth' => optional($this->contact)->date_of_birth,
                 'mobile' => optional($this->contact)->mobile,
                 'status' => optional($this->contact)->status,
                 'created_at' => optional($this->contact)->created_at,
