@@ -186,7 +186,20 @@ class InvoiceController extends Controller
             $query->where('payment_date', '<=', $endDate);
             $patient_query->where('created_at', '<=', $endDate);
             $appointment_query->where('created_at', '<=', $endDate);
-        }
+        };
+        //$total_inv_query = $query;
+        $cash_inv_query = clone  $query;
+        $online_inv_query = clone  $query;
+        $check_inv_query = clone  $query;
+
+        $cash_inv_query->where('paid_by', '=', 'CASH');
+        $online_inv_query->where('paid_by', '=', 'ONLINE');
+        $check_inv_query->where('paid_by', '=', 'CHECK');
+
+        $cash_invoices = $cash_inv_query->get();
+        $online_invoices = $online_inv_query->get();
+        $check_invoices = $check_inv_query->get();
+
         // Get the filtered invoices
         $invoices = $query->get();
         $patients = $patient_query->get();
@@ -197,6 +210,9 @@ class InvoiceController extends Controller
             'total_appointments' => $appointments->count(),
             'total_patients' => $patients->count(),
             'total_invoices' => $invoices->count(),
+            'total_cash_invoices' => $cash_invoices->sum('amount'),
+            'total_online_invoices' => $online_invoices->sum('amount'),
+            'total_check_invoices' => $check_invoices->sum('amount'),
             'total_amount' => $invoices->sum('amount')
         ];
 

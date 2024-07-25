@@ -137,7 +137,7 @@ class PatientController extends Controller
         $patient = Auth::user()->clinic->patients->find($id);
 
         // Update patient details
-        $patient->update($request->only( ['description','status','gender']));
+        $patient->update($request->only( ['description','status','gender','date_of_birth']));
 
         // Update address details if provided
         if ($request->has('address')) {
