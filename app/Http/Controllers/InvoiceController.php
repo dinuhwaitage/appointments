@@ -21,14 +21,29 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
+        $name = $request->input('name');
         $patient_id = $request->input('patient_id');
-        $invoices = Auth::user()->clinic->invoices;
+        $payment_date = $request->input('payment_date');
+        $query = Invoice::query()
+        ->where('invoices.clinic_id', Auth::user()->clinic_id);
 
-        if($patient_id){
-            $invoices = $invoices->where('patient_id', $patient_id);
+        if($name){
+            $query->join('patients', 'invoices.patient_id', "=", "patients.id")
+            ->join('contacts', 'contacts.id', '=', 'patients.contact_id')
+      
+            ->where('contacts.first_name', 'like', '%'.$name.'%')
+            ->orwhere('contacts.last_name', 'like', "%".$name."%")
+            ;
         }
 
-        return InvoiceListResource::collection($invoices);
+        if($payment_date){
+            $query->where('invoices.payment_date', $payment_date);
+       }
+
+        if($patient_id){
+             $query->where('invoices.patient_id', $patient_id);
+        }
+        return InvoiceListResource::collection($query->get());
     }
 
     /**
