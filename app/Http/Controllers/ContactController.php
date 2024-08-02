@@ -70,6 +70,26 @@ class ContactController extends Controller
 
          // Update user details
          $current_user->contact->update($request->only( ['status','first_name','last_name','mobile']));
+
+         if( $current_user->contact->employee){
+             // Update employee details
+            $current_user->contact->employee->update($request->only( ['date_of_birth','gender']));
+
+            if($current_user->contact->employee->address){
+                // Update address details
+                $current_user->contact->employee->address->update($request->only( ['city','line1', 'zipcode']));
+            }
+         }
+
+         if( $current_user->contact->patient){
+            // Update patient details
+           $current_user->contact->patient->update($request->only( ['date_of_birth','gender']));
+
+           if($current_user->contact->patient){
+            // Update address details
+            $current_user->contact->patient->update($request->only( ['city','line1', 'zipcode']));
+        }
+        }
          return response()->json(new UserDetailResource($current_user), 200);
 
     }
