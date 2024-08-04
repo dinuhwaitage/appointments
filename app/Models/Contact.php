@@ -36,9 +36,15 @@ class Contact extends Model
         return ($this->patient) ? $this->patient->gender : optional($this->employee)->gender;
     }
 
-    public function address()
+    public function link_address()
     {
-        return ($this->patient) ? $this->patient->address : optional($this->employee)->address;
+         if($this->patient){ 
+            return $this->patient->address;
+         }elseif($this->employee){
+            return $this->employee->address;
+         }else{
+            return $this->address;
+         }
     }
 
     public function getFullName()
@@ -63,4 +69,11 @@ class Contact extends Model
     {
         return optional(optional($this->roles())->first())->name;
     }
+
+    public function address()
+    {
+        return $this->morphOne(Address::class, 'addressable');
+    }
+
+    
 }

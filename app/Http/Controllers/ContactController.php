@@ -6,6 +6,7 @@ use App\Http\Resources\Users\UserDetailResource;
 use App\Models\Contact;
 use App\Models\Role;
 use App\Models\ContactRole;
+use App\Models\Address;
 use App\Exceptions\CustomException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,16 +80,27 @@ class ContactController extends Controller
                 // Update address details
                 $current_user->contact->employee->address->update($request->only( ['city','line1', 'zipcode']));
             }
-         }
-
-         if( $current_user->contact->patient){
+         }else if( $current_user->contact->patient){
             // Update patient details
            $current_user->contact->patient->update($request->only( ['date_of_birth','gender']));
 
            if($current_user->contact->patient->address){
             // Update address details
-            $current_user->contact->patient->address->update($request->only( ['city','line1', 'zipcode']));
-        }
+             $current_user->contact->patient->address->update($request->only( ['city','line1', 'zipcode']));
+            }
+        }else if( $current_user->contact){
+             // Update patient details
+           $current_user->contact->update($request->only( ['date_of_birth','gender']));
+
+           if($current_user->contact->address){
+            // Update address details
+             $current_user->contact->address->update($request->only( ['city','line1', 'zipcode']));
+            }else{
+                // create address details
+             $address = new Address($request->only( ['city','line1', 'zipcode']));
+             $address->clinic_id =  Auth::user()->clinic_id;
+             $current_user->contact->address()->save($address);
+            }
         }
          return response()->json(new UserDetailResource($current_user), 200);
 
