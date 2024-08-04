@@ -85,9 +85,9 @@ class ContactController extends Controller
             // Update patient details
            $current_user->contact->patient->update($request->only( ['date_of_birth','gender']));
 
-           if($current_user->contact->patient){
+           if($current_user->contact->patient->address){
             // Update address details
-            $current_user->contact->patient->update($request->only( ['city','line1', 'zipcode']));
+            $current_user->contact->patient->address->update($request->only( ['city','line1', 'zipcode']));
         }
         }
          return response()->json(new UserDetailResource($current_user), 200);
