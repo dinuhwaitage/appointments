@@ -16,6 +16,11 @@ class UserDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'date_of_birth'=> $this->contact->date_of_birth(),   
+            'gender'=> $this->contact->gender(),
+            'line1'=> optional($this->contact->address())->line1,   
+            'city'=> optional($this->contact->address())->city,
+            'zipcode'=> optional($this->contact->address())->zipcode,
             'contact' =>   [
                 'id' => $this->contact->id,
                 'first_name' => $this->contact->first_name,
