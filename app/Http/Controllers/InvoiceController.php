@@ -135,6 +135,7 @@ class InvoiceController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'patient_id' => 'nullable|integer',
+            'paid_by' => 'nullable|string',
         ]);
        
 
@@ -142,6 +143,7 @@ class InvoiceController extends Controller
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
         $patient_id = $request->query('patient_id');
+        $paid_by = $request->query('paid_by');
 
         // Build the query
         $query = Invoice::query();
@@ -158,6 +160,10 @@ class InvoiceController extends Controller
 
         if ($endDate) {
             $query->where('payment_date', '<=', $endDate);
+        }
+
+        if ($paid_by) {
+            $query->where('paid_by', '=', $paid_by);
         }
 
         // Get the filtered invoices
