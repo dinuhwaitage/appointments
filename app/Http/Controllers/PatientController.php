@@ -94,7 +94,7 @@ class PatientController extends Controller
 
         $request['clinic_id'] = Auth::user()->clinic_id;
         // Create the patient
-        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender']));
+        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id']));
 
         if ($request->has('address')) {
             // Attach the address to the patient
@@ -137,7 +137,7 @@ class PatientController extends Controller
         $patient = Auth::user()->clinic->patients->find($id);
 
         // Update patient details
-        $patient->update($request->only( ['description','status','gender','date_of_birth']));
+        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id']));
 
         // Update address details if provided
         if ($request->has('address')) {

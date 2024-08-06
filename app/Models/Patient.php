@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Patient extends Model
 {
     use HasFactory;
-    protected $fillable = ['description', 'status','clinic_id','contact_id','date_of_birth','gender'];
+    protected $fillable = ['description', 'status','clinic_id','contact_id','date_of_birth','gender','package_id'];
 
     public function clinic()
     {
@@ -33,5 +33,10 @@ class Patient extends Model
     public function invoices()
     {
         return $this->hasMany(Invoice::class, 'patient_id');
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class, 'package_id');
     }
 }

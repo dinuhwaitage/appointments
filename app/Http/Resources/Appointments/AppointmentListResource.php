@@ -30,11 +30,6 @@ class AppointmentListResource extends JsonResource
                 'id' =>  optional($this->doctor)->id,
                 'name' => optional(optional($this->doctor)->contact)->getFullName(),
             ],
-            'package' =>[
-                'id' => optional($this->package)->id,
-                'name' => optional($this->package)->name,
-                'amount' => optional($this->package)->amount
-            ],
             'clinic' =>[
                 'id' => $this->clinic->id,
                 'name' => $this->clinic->name
