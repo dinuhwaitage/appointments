@@ -19,6 +19,7 @@ class RolesTableSeeder extends Seeder
         Role::create(['name' => 'DOCTOR']);
         Role::create(['name' => 'STAFF']);
         Role::create(['name' => 'PATIENT']);
+        Role::create(['name' => 'ROOT']);
         
     }
 }

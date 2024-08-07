@@ -40,6 +40,15 @@ class Role extends Model
                 "Employee"=>["list","read","add","edit","delete"],
                 "Doctor"=>["list","read","add","edit","delete"]
             ];
+        }elseif($this->name == 'ROOT'){
+            return [
+                "Patient"=>["list","read","add","edit",'delete'],
+                "Appointment"=>["list","read","add","edit","delete"],
+                "Invoice"=>["list","read","add","edit","delete"],
+                "Package"=>["list","read","add","edit","delete"],
+                "Employee"=>["list","read","add","edit","delete"],
+                "Doctor"=>["list","read","add","edit","delete"]
+            ];
         }
 
     }

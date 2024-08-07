@@ -53,7 +53,7 @@ class UserController extends Controller
      */
     public function admin_user(Request $request)
     {
-        if(Auth::user()->contact->firstRole() == 'ADMIN'){
+        if(Auth::user()->contact->firstRole() == 'ROOT'){
             $clinic_id = Auth::user()->clinic_id; 
             $request['email'] = $request->contact['email'];
             $request['clinic_id'] = $clinic_id;
