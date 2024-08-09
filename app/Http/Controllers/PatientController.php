@@ -69,7 +69,7 @@ class PatientController extends Controller
             'email' => 'email|unique:users,email,NULL,id,clinic_id,' . $clinic_id,
             'password' => 'string|min:8',
             'description' => 'string|max:255',
-            'date_of_birth' => 'date',
+            'date_of_birth' => 'nullable|date',
             'address' => 'array',
             'contact' => 'required|array'
         ]);

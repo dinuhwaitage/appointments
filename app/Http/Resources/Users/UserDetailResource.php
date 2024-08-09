@@ -31,6 +31,11 @@ class UserDetailResource extends JsonResource
                 'role' => $this->contact->firstRole(),
                 'permissions' => $this->contact->role_permissions()
             ],
+            'clinic' =>[ 
+                'id' =>  $this->clinic->id,
+                'name' => $this->clinic->name,
+                'city' =>  optional(optional($this->clinic)->address)->city
+            ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

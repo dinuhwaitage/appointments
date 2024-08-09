@@ -41,7 +41,11 @@ class ClinicController extends Controller
      */
     public function show($id)
     {
-        return new ClinicDetailResource(Clinic::findOrFail($id));
+        $clinic = Auth::user()->clinic;
+        return new ClinicDetailResource($clinic);
+    }else{
+        return response()->json(['message' => 'User do not have permission to add user.'], 422);
+    }
     }
 
     /**

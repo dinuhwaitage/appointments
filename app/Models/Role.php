@@ -24,7 +24,9 @@ class Role extends Model
     {
         if ($this->name == 'STAFF'){
            return [
-                'Patient'=>["list","read","add","edit","delete"]
+                'Patient'=>["list","read","add","edit","delete"],
+                "Appointment"=>["list","read","add","edit","delete"],
+                "Invoice"=>["list","read","add","edit","delete"]
            ];
         }elseif($this->name == 'DOCTOR'){
             return [
@@ -38,7 +40,8 @@ class Role extends Model
                 "Invoice"=>["list","read","add","edit","delete"],
                 "Package"=>["list","read","add","edit","delete"],
                 "Employee"=>["list","read","add","edit","delete"],
-                "Doctor"=>["list","read","add","edit","delete"]
+                "Doctor"=>["list","read","add","edit","delete"],
+                "Report"=>["list","read"]
             ];
         }elseif($this->name == 'ROOT'){
             return [
@@ -47,7 +50,8 @@ class Role extends Model
                 "Invoice"=>["list","read","add","edit","delete"],
                 "Package"=>["list","read","add","edit","delete"],
                 "Employee"=>["list","read","add","edit","delete"],
-                "Doctor"=>["list","read","add","edit","delete"]
+                "Doctor"=>["list","read","add","edit","delete"],
+                "Report"=>["list","read"]
             ];
         }
 

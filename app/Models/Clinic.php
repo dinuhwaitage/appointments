@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Clinic extends Model
 {
     use HasFactory;
+    protected $fillable = ['name', 'number','email', 'phone','description','website'];
 
     public function users()
     {
@@ -30,9 +31,14 @@ class Clinic extends Model
     }
 
 
+    public function address()
+    {
+        return $this->morphOne(Address::class, 'addressable');
+    }
+
     public function addresses()
     {
-        return $this->morphMany(Address::class, 'addressable');
+        return $this->hasMany(Address::class, 'clinic_id');
     }
 
     public function packages()
