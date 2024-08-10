@@ -19,7 +19,11 @@ class ClinicController extends Controller
      */
     public function index()
     {
-        return ClinicListResource::collection(Clinic::all());
+        if(optional(Auth::user()->contact)->firstRole() == 'ROOT'){
+            return ClinicListResource::collection(Clinic::all());
+        }else{
+            return response()->json(['message' => 'User does not have permission to access clinics.'], 422);
+        }
     }
 
     /**
@@ -30,7 +34,17 @@ class ClinicController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'nullable|email'
+        ]);
+        if(optional(Auth::user()->contact)->firstRole() == 'ROOT'){
+            $clinic = Clinic::create($request->only( ['name', 'number','email', 'phone','description','status']));
+            return response()->json(new ClinicDetailResource($clinic), 201);
+
+        }else{
+            return response()->json(['message' => 'User does not have permission to add clinics.'], 422);
+        }
     }
 
     /**
@@ -42,10 +56,11 @@ class ClinicController extends Controller
     public function show($id)
     {
         $clinic = Auth::user()->clinic;
-        return new ClinicDetailResource($clinic);
-    }else{
-        return response()->json(['message' => 'User do not have permission to add user.'], 422);
-    }
+        if($clinic->id == $id){
+            return new ClinicDetailResource($clinic);
+        }else{
+            return response()->json(['message' => 'Clinic id does not match with the current user.'], 422);
+        }
     }
 
     /**
