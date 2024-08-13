@@ -28,6 +28,10 @@ Route::middleware(['whitelist.host'])->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/patients/slim', [PatientController::class, 'slim']);
+        Route::get('/appointments/slim', [AppointmentController::class, 'slim']);
+        Route::get('/employees/slim', [EmployeeController::class, 'slim']);
+        Route::get('/doctors/slim', [DoctorController::class, 'slim']);
         Route::get('/invoices/stats', [InvoiceController::class, 'stats']);
         Route::get('/invoices/reports', [InvoiceController::class, 'reports']);
         Route::get('user', [UserController::class, 'user']);

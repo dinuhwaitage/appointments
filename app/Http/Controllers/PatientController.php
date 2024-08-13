@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Patients\PatientDetailResource;
 use App\Http\Resources\Patients\PatientListResource;
+use App\Http\Resources\Patients\PatientSlimResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Addresses\AddressDetailResource;
 use App\Models\User;
@@ -45,6 +46,18 @@ class PatientController extends Controller
     {
         $patients = Auth::user()->clinic->patients;
         return PatientListResource::collection($patients);
+    }
+
+            /**
+     * Display a listing of the slim resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function slim(Request $request)
+    {
+       
+        $patients = Auth::user()->clinic->patients;
+        return PatientSlimResource::collection($patients);
     }
 
     /**

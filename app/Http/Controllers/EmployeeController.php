@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Employees\EmployeeDetailResource;
 use App\Http\Resources\Employees\EmployeeListResource;
+use App\Http\Resources\Employees\EmployeeSlimResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Addresses\AddressDetailResource;
 use App\Models\Employee;
@@ -35,6 +36,18 @@ class EmployeeController extends Controller
     {
         $employees = Auth::user()->clinic->employees->where('employee_type', '=', 'STAFF');
         return EmployeeListResource::collection($employees);
+    }
+
+        /**
+     * Display a listing of the slim resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function slim()
+    {
+       
+        $employees = Auth::user()->clinic->employees->where('employee_type', '=', 'STAFF');
+        return EmployeeSlimResource::collection($employees);
     }
 
     /**

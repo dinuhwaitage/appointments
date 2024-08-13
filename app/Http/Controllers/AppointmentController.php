@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Resources\Appointments\AppointmentDetailResource;
 use App\Http\Resources\Appointments\AppointmentListResource;
+use App\Http\Resources\Appointments\AppointmentSlimResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,28 @@ class AppointmentController extends Controller
             $appointments = $appointments->where('patient_id', $patient_id);
         }
         return AppointmentListResource::collection($appointments);
+    }
+
+        /**
+     * Display a listing of the slim resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function slim(Request $request)
+    {
+       
+        $patient_id = $request->input('patient_id');
+        $doctor_id = $request->input('doctor_id');
+        $appointments = Auth::user()->clinic->appointments;
+     
+        if($doctor_id){
+            $appointments = $appointments->where('doctor_id', $doctor_id);
+        }
+
+        if($patient_id){
+            $appointments = $appointments->where('patient_id', $patient_id);
+        }
+        return AppointmentSlimResource::collection($appointments);
     }
 
     /**

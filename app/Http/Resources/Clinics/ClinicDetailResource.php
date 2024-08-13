@@ -23,12 +23,12 @@ class ClinicDetailResource extends JsonResource
             'website' => $this->website,
             'description' => $this->description,
             'address' =>  [
-                'id' => $this->address->id,
-                'line1' => $this->address->line1,
-                'line2' => $this->address->line2,
-                'city' => $this->address->city,
-                'state' => $this->address->state,
-                'zipcode' => $this->address->zipcode
+                'id' => optional($this->address)->id,
+                'line1' => optional($this->address)->line1,
+                'line2' => optional($this->address)->line2,
+                'city' => optional($this->address)->city,
+                'state' => optional($this->address)->state,
+                'zipcode' => optional($this->address)->zipcode
             ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

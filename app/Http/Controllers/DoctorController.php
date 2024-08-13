@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Doctors\DoctorDetailResource;
 use App\Http\Resources\Doctors\DoctorListResource;
+use App\Http\Resources\Doctors\DoctorSlimResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Address\AddressDetailResource;
 use App\Models\Employee;
@@ -34,6 +35,17 @@ class DoctorController extends Controller
     {
         $doctors = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR');
         return DoctorListResource::collection($doctors);
+    }
+
+    /**
+     * Display a listing of the slim resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function slim()
+    {
+        $doctors = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR');
+        return DoctorSlimResource::collection($doctors);
     }
 
     /**
