@@ -39,7 +39,7 @@ class PackageController extends Controller
        ]);
 
         // Create the package
-        $package = Package::create($request->only( ['name', 'amount','status','description', 'clinic_id']));
+        $package = Package::create($request->only( ['name', 'amount','status','description', 'clinic_id','seating_count']));
         return response()->json($package, 201);
     }
 
@@ -74,7 +74,7 @@ class PackageController extends Controller
          $package = Auth::user()->clinic->packages->find($id);
 
          // Update employee details
-         $package->update($request->only( ['name', 'amount','status', 'description','status','gender','specification']));
+         $package->update($request->only( ['name', 'amount','status', 'description','status','gender','specification','seating_count']));
          return response()->json($package, 200);
     }
 

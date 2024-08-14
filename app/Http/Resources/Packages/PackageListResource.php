@@ -17,6 +17,7 @@ class PackageListResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'seating_count' => $this->seating_count,
             'amount' => $this->amount,
             'description' => $this->description,
             'status' => $this->status,

@@ -20,6 +20,11 @@ class Appointment extends Model
         return $this->belongsTo(Employee::class, 'doctor_id');
     }
 
+    public function package()
+    {
+        return $this->belongsTo(Package::class, 'package_id');
+    }
+
     public function patient()
     {
         return $this->belongsTo(Patient::class, 'patient_id');
