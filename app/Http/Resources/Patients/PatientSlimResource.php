@@ -16,7 +16,14 @@ class PatientSlimResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->contact->getFullName()
+            'name' => $this->contact->getFullName(),
+            'package' =>[
+                'id' => optional($this->package)->id,
+                'name' => optional($this->package)->name,
+                'seating_count' => optional($this->package)->seating_count,
+                'available_count' => $this->available_package_count(),
+                'amount' => optional($this->package)->amount
+            ],
         ];
     }
 }
