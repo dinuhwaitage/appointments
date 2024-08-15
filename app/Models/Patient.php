@@ -40,13 +40,14 @@ class Patient extends Model
         return $this->belongsTo(Package::class, 'package_id');
     }
 
-    public function package_appointments()
+    public function package_appointments($package_id)
     {
-        return $this->appoitments->where('package_id', $this->package_id);
+        $pkg_id = $package_id ? $package_id : $this->package_id;
+        return $this->appoitments->where('package_id', $pkg_id);
     }
 
-    public function available_package_count()
+    public function available_package_count($package_id = null)
     {
-        return count($this->package_appointments()) ? optional($this->package)->seating_count - count($this->package_appointments()) : optional($this->package)->seating_count;
+        return count($this->package_appointments($package_id)) ? optional($this->package)->seating_count - count($this->package_appointments($package_id)) : optional($this->package)->seating_count;
     }
 }

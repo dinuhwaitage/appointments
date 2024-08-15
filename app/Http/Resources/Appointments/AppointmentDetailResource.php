@@ -28,6 +28,13 @@ class AppointmentDetailResource extends JsonResource
                 'date_of_birth' =>  optional($this->patient)->date_of_birth,
                 'gender' =>  optional($this->patient)->gender
             ],
+            'package' =>[
+                'id' => optional($this->package)->id,
+                'name' => optional($this->package)->name,
+                'seating_count' => optional($this->package)->seating_count,
+                'available_count' => (optional($this->package)->id)?$this->patient->available_package_count($this->package->id) : null,
+                'amount' => optional($this->package)->amount
+            ],
             'doctor' => [ 
                 'id' =>  optional($this->doctor)->id,
                 'name' => optional($this->doctor->contact)->getFullName(),
