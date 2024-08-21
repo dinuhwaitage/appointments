@@ -107,7 +107,10 @@ class PatientController extends Controller
 
         $request['clinic_id'] = Auth::user()->clinic_id;
         // Create the patient
-        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id']));
+        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date']));
+
+        // Handle photo uploads
+        $this->handlePhotoUploads($request, $patient);
 
         if ($request->has('address')) {
             // Attach the address to the patient
@@ -150,7 +153,10 @@ class PatientController extends Controller
         $patient = Auth::user()->clinic->patients->find($id);
 
         // Update patient details
-        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id']));
+        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date']));
+
+        // Handle photo uploads
+        $this->handlePhotoUploads($request, $patient);
 
         // Update address details if provided
         if ($request->has('address')) {
@@ -195,5 +201,21 @@ class PatientController extends Controller
  
          // Return a JSON response
          return response()->json(['message' => 'Patient deleted successfully'], 200);
+    }
+
+    
+    private function handlePhotoUploads(Request $request, $patient)
+    {
+        if ($request->hasFile('assets')) {
+            foreach ($request->file('assets') as $photo) {
+                //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
+                $photoPath = $photo->store('assets/'.$patient->clinic_id.'/'.$patient->id.'/patients');
+
+                // Store the file in the 'public/room_photos' directory under a unique filename
+                //$filePath = $file->storeAs('room_photos', $filename, 'public');
+
+                $patient->assets()->create(['url' => asset($photoPath), 'clinic_id' => $patient->clinic_id]);
+            }
+        }
     }
 }

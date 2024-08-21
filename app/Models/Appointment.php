@@ -30,4 +30,9 @@ class Appointment extends Model
         return $this->belongsTo(Patient::class, 'patient_id');
     }
 
+    public function assets()
+    {
+        return $this->morphMany(Asset::class, 'imageable');
+    }
+
 }

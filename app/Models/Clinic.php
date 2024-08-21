@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Clinic extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'number','email', 'phone','description','website','logo_url'];
+    protected $fillable = ['name', 'number','email', 'phone','description','website','logo_url','registration_date','gst_number'];
 
     public function users()
     {
@@ -49,5 +49,10 @@ class Clinic extends Model
     public function invoices()
     {
         return $this->hasMany(Invoice::class, 'clinic_id');
+    }
+
+    public function assets()
+    {
+        return $this->morphMany(Asset::class, 'imageable');
     }
 }

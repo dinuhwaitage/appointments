@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Patient extends Model
 {
     use HasFactory;
-    protected $fillable = ['description', 'status','clinic_id','contact_id','date_of_birth','gender','package_id'];
+    protected $fillable = ['description', 'status','clinic_id','contact_id','date_of_birth','gender','package_id','registration_date','package_start_date'];
 
     public function clinic()
     {
@@ -49,5 +49,10 @@ class Patient extends Model
     public function available_package_count($package_id = null)
     {
         return count($this->package_appointments($package_id)) ? optional($this->package)->seating_count - count($this->package_appointments($package_id)) : optional($this->package)->seating_count;
+    }
+
+    public function assets()
+    {
+        return $this->morphMany(Asset::class, 'imageable');
     }
 }

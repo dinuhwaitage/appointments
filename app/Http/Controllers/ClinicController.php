@@ -39,7 +39,7 @@ class ClinicController extends Controller
             'email' => 'nullable|email'
         ]);
         if(optional(Auth::user()->contact)->firstRole() == 'ROOT'){
-            $clinic = Clinic::create($request->only( ['name', 'number','email', 'phone','description','status']));
+            $clinic = Clinic::create($request->only( ['name', 'number','email', 'phone','description','status','gst_number']));
             return response()->json(new ClinicDetailResource($clinic), 201);
 
         }else{
@@ -72,7 +72,37 @@ class ClinicController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Validate the request
+        $request->validate([
+            'name' => 'string|max:255',
+            'registration_date' => 'nullable|date',
+            'address' => 'array'
+        ]);
+
+        if(optional(Auth::user()->contact)->firstRole() == 'ADMIN'){
+            $clinic = Auth::user()->clinic;
+
+            // Update clinic details
+            $clinic->update($request->only( ['name', 'number','email', 'phone','description','status','registration_date','gst_number']));
+
+            // Update address details if provided
+            if ($request->has('address')) {
+                $addressData = $request->address;
+                
+                if ($clinic->address) {
+                    $clinic->address->update($addressData);
+                } else {
+                    $address = new Address($addressData);
+                    $address->clinic_id =  Auth::user()->clinic_id;
+                    $clinic->address()->save($address);
+                }
+            }
+            return response()->json($clinic, 200);
+        }else{
+            return response()->json(['message' => 'User does not have permission to add clinics.'], 422);
+        }
+
+       
     }
 
     /**
