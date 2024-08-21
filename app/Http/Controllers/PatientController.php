@@ -83,6 +83,8 @@ class PatientController extends Controller
             'password' => 'string|min:8',
             'description' => 'string|max:255',
             'date_of_birth' => 'nullable|date',
+            'registration_date'  => 'nullable|date',
+            'package_start_date'  => 'nullable|date',
             'address' => 'array',
             'contact' => 'required|array'
         ]);
@@ -106,6 +108,10 @@ class PatientController extends Controller
         $request['contact_id'] = $user->contact->id;
 
         $request['clinic_id'] = Auth::user()->clinic_id;
+
+        if(!$request['registration_date']){
+            $request['registration_date'] = date("Y-m-d");
+        }
         // Create the patient
         $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date']));
 
