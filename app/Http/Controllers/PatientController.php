@@ -73,7 +73,8 @@ class PatientController extends Controller
             $request['email'] = $request->contact['email'];
         }else{
             // Generate a 5-character random string
-            $request['email'] = $request->contact['first_name'].$this->generateRandomString(10)."@gmail.com";
+            $first_name = str_replace(' ', '', $request->contact['first_name']);
+            $request['email'] = $first_name.$this->generateRandomString(10)."@gmail.com";
         }
         $request['clinic_id'] = $clinic_id;
 
