@@ -153,7 +153,7 @@ class PatientController extends Controller
         $request->validate([
             'description' => 'string|max:255',
             'address' => 'array',
-            'contact' => 'required|array'
+            'contact' => 'array'
         ]);
 
         // Find the patient
