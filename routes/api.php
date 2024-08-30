@@ -28,6 +28,9 @@ Route::middleware(['whitelist.host'])->group(function () {
     Route::post('login', [AuthController::class, 'login']);
 
     Route::middleware('auth:sanctum')->group(function () {
+       
+        Route::patch('/patients/{id}/uploads', [PatientController::class, 'uploads']);
+        Route::patch('/appointments/{id}/uploads', [AppointmentController::class, 'uploads']);
         Route::get('/patients/slim', [PatientController::class, 'slim']);
         Route::get('/appointments/slim', [AppointmentController::class, 'slim']);
         Route::get('/employees/slim', [EmployeeController::class, 'slim']);

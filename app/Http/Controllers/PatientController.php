@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\Storage;
 
 class PatientController extends Controller
 {
@@ -48,7 +49,7 @@ class PatientController extends Controller
         return PatientListResource::collection($patients);
     }
 
-            /**
+    /**
      * Display a listing of the slim resource.
      *
      * @return \Illuminate\Http\Response
@@ -162,8 +163,6 @@ class PatientController extends Controller
         // Update patient details
         $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date']));
 
-        // Handle photo uploads
-        $this->handlePhotoUploads($request, $patient);
 
         // Update address details if provided
         if ($request->has('address')) {
@@ -211,18 +210,36 @@ class PatientController extends Controller
     }
 
     
-    private function handlePhotoUploads(Request $request, $patient)
+     /**
+     * Display a listing of the uploads resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function uploads(Request $request, $id)
     {
-        if ($request->hasFile('assets')) {
+         // Find the patient
+         $patient = Auth::user()->clinic->patients->find($id);
+
+        if ($patient && $request->hasFile('assets')) {
             foreach ($request->file('assets') as $photo) {
                 //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
-                $photoPath = $photo->store('assets/'.$patient->clinic_id.'/'.$patient->id.'/patients');
+                $photoPath = $photo->store('assets/'.$patient->clinic_id.'/'.$patient->id.'/patients', 'public');
 
                 // Store the file in the 'public/room_photos' directory under a unique filename
                 //$filePath = $file->storeAs('room_photos', $filename, 'public');
 
-                $patient->assets()->create(['url' => asset($photoPath), 'clinic_id' => $patient->clinic_id]);
+               $success =  $patient->assets()->create(['url' => asset($photoPath), 'clinic_id' => $patient->clinic_id]);
             }
+
+            // Return a JSON response
+            if($success){
+                return response()->json(['message' => 'Patient deleted successfully'], 200);
+            }else{
+                return response()->json(['message' => 'server error'], 500);
+            }
+            
+        }else{
+            return response()->json(['message' => 'Record not found'], 404);
         }
     }
 }
