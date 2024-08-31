@@ -40,7 +40,7 @@ class AppointmentController extends Controller
 
 
         if(Auth::user()->contact->is_doctor()){
-            $doctor_id = Auth::user()->contact->employee_id;
+            $doctor_id = Auth::user()->contact->employee->id;
         }
 
         if ($days) {

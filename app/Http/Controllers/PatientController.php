@@ -51,15 +51,14 @@ class PatientController extends Controller
         $query->where('clinic_id', '=', Auth::user()->clinic_id);
 
         if(Auth::user()->contact->is_doctor()){
-            $doctor_id = Auth::user()->contact->employee_id;
+            $doctor_id = Auth::user()->contact->employee->id;
 
             // Build the query
             $appointment = Appointment::query();
             $appointment->where('clinic_id', '=', Auth::user()->clinic_id);
             $appointment->where('doctor_id', '=', $doctor_id);
             $appointment->select('patient_id');
-            $appointment_ids = $appointment->get();
-        
+            $appointment_ids = $appointment->get();        
             $query->whereIn('id', $appointment_ids);
         }
 
