@@ -12,6 +12,7 @@ use App\Models\Contact;
 use App\Models\Address;
 use App\Models\Patient;
 use App\Models\Package;
+use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
