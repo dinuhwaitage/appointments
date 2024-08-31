@@ -30,7 +30,8 @@ class Role extends Model
            ];
         }elseif($this->name == 'DOCTOR'){
             return [
-                "Appointment"=>["list","read","add","edit","delete"]
+                "Appointment"=>["list","read","edit"],
+                "Patient"=>["list","read"]
             ];
         }elseif($this->name == 'ADMIN'){
             return [

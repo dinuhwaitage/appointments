@@ -19,18 +19,57 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
+        // Validate the request data
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'days' => 'nullable|integer',
+            'patient_id' => 'nullable|integer',
+            'doctor_id' => 'nullable|integer'
+        ]);
+       
+
+        // Get the start and end date from the request
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+        $days = $request->query('days');
+        
        
         $patient_id = $request->input('patient_id');
         $doctor_id = $request->input('doctor_id');
-        $appointments = Auth::user()->clinic->appointments;
+
+
+        if(Auth::user()->contact->id_doctor()){
+            $doctor_id = Auth::user()->contact->employee_id;
+        }
+
+        if ($days) {
+            $endDate = now();
+            $startDate = now()->subDays($days);
+        }
+
+         // Build the query
+         $query = Appointment::query();
+
+         $query->where('clinic_id', '=', Auth::user()->clinic_id);
      
         if($doctor_id){
-            $appointments = $appointments->where('doctor_id', $doctor_id);
+            $query->where('doctor_id', $doctor_id);
         }
 
         if($patient_id){
-            $appointments = $appointments->where('patient_id', $patient_id);
+            $query->where('patient_id', $patient_id);
         }
+
+        if ($startDate) {
+            $query->where('date', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->where('date', '<=', $endDate);
+        }
+         // Get the filtered appointments
+         $appointments = $query->get();
         return AppointmentListResource::collection($appointments);
     }
 
