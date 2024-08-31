@@ -55,9 +55,9 @@ class PatientController extends Controller
 
         if($doctor_id){
             $query->join('appointments', 'appointments.patient_id', '=', 'patients.id')
-            $query->where('patients.doctor_id', $doctor_id);
+            $query->where('appointments.doctor_id', $doctor_id);
             $query->select('patients.*');
-            $query->distinct("patients.id");
+            $query->distinct('patients.id');
         }
 
          // Get the filtered appointments

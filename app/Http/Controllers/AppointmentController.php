@@ -194,10 +194,12 @@ class AppointmentController extends Controller
             }
             // Return a JSON response
             if($success){
-                return response()->json(['message' => 'Appointment deleted successfully'], 200);
+                return response()->json(['message' => 'Attachment uploaded successfully'], 200);
+            }else{
+                return response()->json(['message' => 'unable to upload attachments'], 500);
             }
         }else{
-            return response()->json(['message' => 'unable to upload attachments'], 500);
+            return response()->json(['message' => 'unable to upload attachments'], 404);
         }
     }
 }
