@@ -185,7 +185,7 @@ class InvoiceController extends Controller
         ]);
         $days = $request->query('days') ? $request->query('days') : 30;
         $endDate = now();
-        $startDate = now()->subDays($days); $endDate = now();
+        $startDate = now()->subDays($days);
         
 
        // Build the query

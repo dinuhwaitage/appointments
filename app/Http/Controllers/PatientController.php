@@ -43,9 +43,27 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $patients = Auth::user()->clinic->patients;
+        // Build the query
+        $query = Patient::query();
+        $query->where('patients.clinic_id', '=', Auth::user()->clinic_id);
+
+        if(Auth::user()->contact->id_doctor()){
+            $doctor_id = Auth::user()->contact->employee_id;
+        }
+
+        if($doctor_id){
+            $query->join('appointments', 'appointments.patient_id', '=', 'patients.id')
+            $query->where('patients.doctor_id', $doctor_id);
+            $query->select('patients.*');
+            $query->distinct("patients.id");
+        }
+
+         // Get the filtered appointments
+         $patients = $query->get();
+
+        
         return PatientListResource::collection($patients);
     }
 
@@ -117,8 +135,6 @@ class PatientController extends Controller
         // Create the patient
         $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date']));
 
-        // Handle photo uploads
-        $this->handlePhotoUploads($request, $patient);
 
         if ($request->has('address')) {
             // Attach the address to the patient
