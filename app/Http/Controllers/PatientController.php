@@ -51,9 +51,7 @@ class PatientController extends Controller
 
         if(Auth::user()->contact->is_doctor()){
             $doctor_id = Auth::user()->contact->employee_id;
-        }
 
-        if($doctor_id){
             // Build the query
             $appointment = Appointment::query();
             $appointment->where('clinic_id', '=', Auth::user()->clinic_id);
