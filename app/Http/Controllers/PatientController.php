@@ -47,17 +47,21 @@ class PatientController extends Controller
     {
         // Build the query
         $query = Patient::query();
-        $query->where('patients.clinic_id', '=', Auth::user()->clinic_id);
+        $query->where('clinic_id', '=', Auth::user()->clinic_id);
 
-        if(Auth::user()->contact->id_doctor()){
+        if(Auth::user()->contact->is_doctor()){
             $doctor_id = Auth::user()->contact->employee_id;
         }
 
         if($doctor_id){
-            $query->join('appointments', 'appointments.patient_id', '=', 'patients.id')
-            $query->where('appointments.doctor_id', $doctor_id);
-            $query->select('patients.*');
-            $query->distinct('patients.id');
+            // Build the query
+            $appointment = Appointment::query();
+            $appointment->where('clinic_id', '=', Auth::user()->clinic_id);
+            $appointment->where('doctor_id', '=', $doctor_id);
+            $appointment->select('patient_id');
+            $appointment_ids = $appointment->get();
+        
+            $query->whereIn('id', $appointment_ids);
         }
 
          // Get the filtered appointments

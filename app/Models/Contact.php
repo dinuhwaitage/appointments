@@ -75,7 +75,7 @@ class Contact extends Model
         return $this->morphOne(Address::class, 'addressable');
     }
 
-    public function id_doctor()
+    public function is_doctor()
     {
         return $this->firstRole() == 'DOCTOR';
     }
