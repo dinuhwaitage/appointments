@@ -50,7 +50,7 @@ class PatientController extends Controller
         $query = Patient::query();
         $query->where('clinic_id', '=', Auth::user()->clinic_id);
 
-        if(Auth::user()->contact->is_doctor()){
+        if(Auth::user()->contact->is_doctor() && Auth::user()->contact->employee){
             $doctor_id = Auth::user()->contact->employee->id;
 
             // Build the query
