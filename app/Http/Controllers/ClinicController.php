@@ -84,7 +84,7 @@ class ClinicController extends Controller
             $clinic = Auth::user()->clinic;
 
             // Update clinic details
-            $clinic->update($request->only( ['name', 'number','email', 'phone','description','status','registration_date','gst_number']));
+            $clinic->update($request->only( ['name', 'number','email', 'phone','description','status','registration_date','gst_number','website']));
 
             // Update address details if provided
             if ($request->has('address')) {
