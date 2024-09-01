@@ -8,6 +8,7 @@ use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AppointmentController extends Controller
 {
@@ -18,18 +19,57 @@ class AppointmentController extends Controller
      */
     public function index(Request $request)
     {
+        // Validate the request data
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'days' => 'nullable|integer',
+            'patient_id' => 'nullable|integer',
+            'doctor_id' => 'nullable|integer'
+        ]);
+       
+
+        // Get the start and end date from the request
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+        $days = $request->query('days');
+        
        
         $patient_id = $request->input('patient_id');
         $doctor_id = $request->input('doctor_id');
-        $appointments = Auth::user()->clinic->appointments;
+
+
+        if(Auth::user()->contact->is_doctor() && Auth::user()->contact->employee){
+            $doctor_id = Auth::user()->contact->employee->id;
+        }
+
+        if ($days) {
+            $endDate = now();
+            $startDate = now()->subDays($days);
+        }
+
+         // Build the query
+         $query = Appointment::query();
+
+         $query->where('clinic_id', '=', Auth::user()->clinic_id);
      
         if($doctor_id){
-            $appointments = $appointments->where('doctor_id', $doctor_id);
+            $query->where('doctor_id', $doctor_id);
         }
 
         if($patient_id){
-            $appointments = $appointments->where('patient_id', $patient_id);
+            $query->where('patient_id', $patient_id);
         }
+
+        if ($startDate) {
+            $query->where('date', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->where('date', '<=', $endDate);
+        }
+         // Get the filtered appointments
+         $appointments = $query->get();
         return AppointmentListResource::collection($appointments);
     }
 
@@ -75,9 +115,6 @@ class AppointmentController extends Controller
         // Create the appointment
         $appointment = Appointment::create($request->only( ['details','date','time','patient_id','doctor_id', 'status','clinic_id','diagnosis','fee','package_id']));
 
-        // Handle photo uploads
-        $this->handlePhotoUploads($request, $appointment);
-
         return response()->json($appointment, 201);
     }
 
@@ -114,9 +151,6 @@ class AppointmentController extends Controller
           // Update employee details
           $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id']));
 
-          // Handle photo uploads
-            $this->handlePhotoUploads($request, $appointment);
-
           return response()->json($appointment, 200);
   
     }
@@ -142,18 +176,30 @@ class AppointmentController extends Controller
          return response()->json(['message' => 'Appointment deleted successfully'], 200);
     }
 
-    private function handlePhotoUploads(Request $request, $appointment)
+    private function uploads(Request $request, $id)
     {
-        if ($request->hasFile('assets')) {
+         // Find the 
+         $appointment = Auth::user()->clinic->appointments->find($id);
+
+        if ($appointment && $request->hasFile('assets')) {
             foreach ($request->file('assets') as $photo) {
+                
                 //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
-                $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/'.$appointment->patient_id.'/appointments');
+                $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/'.$appointment->patient_id.'/appointments', 'public');
 
                 // Store the file in the 'public/room_photos' directory under a unique filename
                 //$filePath = $file->storeAs('room_photos', $filename, 'public');
 
-                $appointment->assets()->create(['url' => asset($photoPath), 'clinic_id' => $appointment->clinic_id]);
+                $success = $appointment->assets()->create(['url' => asset($photoPath), 'clinic_id' => $appointment->clinic_id]);
             }
+            // Return a JSON response
+            if($success){
+                return response()->json(['message' => 'Attachment uploaded successfully'], 200);
+            }else{
+                return response()->json(['message' => 'unable to upload attachments'], 500);
+            }
+        }else{
+            return response()->json(['message' => 'unable to upload attachments'], 404);
         }
     }
 }

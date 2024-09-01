@@ -7,6 +7,7 @@ use App\Http\Resources\Clinics\ClinicListResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Http\Resources\Address\AddressDetailResource;
 use App\Models\Clinic;
+use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -83,7 +84,7 @@ class ClinicController extends Controller
             $clinic = Auth::user()->clinic;
 
             // Update clinic details
-            $clinic->update($request->only( ['name', 'number','email', 'phone','description','status','registration_date','gst_number']));
+            $clinic->update($request->only( ['name', 'number','email', 'phone','description','status','registration_date','gst_number','website']));
 
             // Update address details if provided
             if ($request->has('address')) {
