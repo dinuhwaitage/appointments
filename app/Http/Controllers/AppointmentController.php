@@ -39,7 +39,7 @@ class AppointmentController extends Controller
         $doctor_id = $request->input('doctor_id');
 
 
-        if(Auth::user()->contact->is_doctor()){
+        if(Auth::user()->contact->is_doctor() && Auth::user()->contact->employee){
             $doctor_id = Auth::user()->contact->employee->id;
         }
 
