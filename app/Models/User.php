@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'clinic_id'
+        'clinic_id',
+        'status'
     ];
 
     public function clinic()
@@ -37,6 +38,10 @@ class User extends Authenticatable
     public function address()
     {
         return $this->morphOne(Address::class, 'addressable');
+    }
+
+    public function is_active(){
+        return $this->status == 'ACTIVE';
     }
 
     /**

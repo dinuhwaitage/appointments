@@ -39,10 +39,22 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (!Auth::attempt($credentials)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        // Check if the user exists
+        $temp_user = User::where('email', $credentials['email'])->first();
+
+        if ($temp_user && $temp_user->is_active()) {
+            // Check if the user's clinic is active
+            if ($temp_user->clinic && $temp_user->clinic->is_active()) {
+                if (!Auth::attempt($credentials)) {
+                    throw ValidationException::withMessages([
+                        'email' => ['The provided credentials are incorrect.'],
+                    ]);
+                }
+            } else {
+                return response()->json(['message' => 'Clinic is not active'], 403);
+            }
+        } else {
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         $user = $request->user();
