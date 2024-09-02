@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Clinic extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'number','email', 'phone','description','website','logo_url','registration_date','gst_number'];
+    protected $fillable = ['name', 'number','email', 'phone','description','website','logo_url','registration_date','gst_number','status'];
 
     public function users()
     {
@@ -54,5 +54,9 @@ class Clinic extends Model
     public function assets()
     {
         return $this->morphMany(Asset::class, 'imageable');
+    }
+
+    public function is_active(){
+        return $this->status == 'ACTIVE';
     }
 }
