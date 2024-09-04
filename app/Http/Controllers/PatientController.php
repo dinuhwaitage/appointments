@@ -50,7 +50,7 @@ class PatientController extends Controller
         $query = Patient::query();
         $query->where('clinic_id', '=', Auth::user()->clinic_id);
 
-        if(Auth::user()->contact->is_doctor() && Auth::user()->contact->employee){
+        /* if(Auth::user()->contact->is_doctor() && Auth::user()->contact->employee){
             $doctor_id = Auth::user()->contact->employee->id;
 
             // Build the query
@@ -60,7 +60,7 @@ class PatientController extends Controller
             $appointment->select('patient_id');
             $appointment_ids = $appointment->get();        
             $query->whereIn('id', $appointment_ids);
-        }
+        } */
 
          // Get the filtered appointments
          $patients = $query->get();
@@ -251,7 +251,7 @@ class PatientController extends Controller
 
             // Return a JSON response
             if($success){
-                return response()->json(['message' => 'Patient deleted successfully'], 200);
+                return response()->json(['message' => 'Patient attachment uploaded successfully'], 200);
             }else{
                 return response()->json(['message' => 'server error'], 500);
             }

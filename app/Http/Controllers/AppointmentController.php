@@ -39,9 +39,9 @@ class AppointmentController extends Controller
         $doctor_id = $request->input('doctor_id');
 
 
-        if(Auth::user()->contact->is_doctor() && Auth::user()->contact->employee){
+       /*  if(Auth::user()->contact->is_doctor() && Auth::user()->contact->employee){
             $doctor_id = Auth::user()->contact->employee->id;
-        }
+        } */
 
         if ($days) {
             $endDate = now();
@@ -194,7 +194,7 @@ class AppointmentController extends Controller
             }
             // Return a JSON response
             if($success){
-                return response()->json(['message' => 'Attachment uploaded successfully'], 200);
+                return response()->json(['message' => 'Appointment attachment uploaded successfully'], 200);
             }else{
                 return response()->json(['message' => 'unable to upload attachments'], 500);
             }
