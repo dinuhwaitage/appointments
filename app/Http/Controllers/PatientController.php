@@ -243,10 +243,13 @@ class PatientController extends Controller
                 //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
                 $photoPath = $photo->store('assets/'.$patient->clinic_id.'/'.$patient->id.'/patients', 'public');
 
+                // Generate the URL for the uploaded file
+                $url = Storage::url($photoPath);
+
                 // Store the file in the 'public/room_photos' directory under a unique filename
                 //$filePath = $file->storeAs('room_photos', $filename, 'public');
 
-               $success =  $patient->assets()->create(['url' => asset($photoPath), 'clinic_id' => $patient->clinic_id]);
+               $success =  $patient->assets()->create(['url' => $url, 'clinic_id' => $patient->clinic_id]);
             }
 
             // Return a JSON response
