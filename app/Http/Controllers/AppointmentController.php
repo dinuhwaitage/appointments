@@ -190,7 +190,10 @@ class AppointmentController extends Controller
                 // Store the file in the 'public/room_photos' directory under a unique filename
                 //$filePath = $file->storeAs('room_photos', $filename, 'public');
 
-                $success = $appointment->assets()->create(['url' => asset($photoPath), 'clinic_id' => $appointment->clinic_id]);
+                // Generate the URL for the uploaded file
+                $url = Storage::url($photoPath);
+
+                $success = $appointment->assets()->create(['url' => $url, 'clinic_id' => $appointment->clinic_id]);
             }
             // Return a JSON response
             if($success){
