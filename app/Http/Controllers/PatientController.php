@@ -237,8 +237,8 @@ class PatientController extends Controller
     {
          // Find the patient
          $patient = Auth::user()->clinic->patients->find($id);
-
         if ($patient && $request->hasFile('assets')) {
+
             foreach ($request->file('assets') as $photo) {
                 //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
                 $photoPath = $photo->store('assets/'.$patient->clinic_id.'/'.$patient->id.'/patients', 'public');
