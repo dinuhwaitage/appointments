@@ -183,7 +183,7 @@ class AppointmentController extends Controller
         $attachment = $appointment->assets()->find($id)
 
         // Check if the attachment exists
-        if ($attachment) {
+        if($attachment && $attachment->id){
             
             // Delete the file from storage
             if (Storage::disk('public')->exists($attachment->url)) {
