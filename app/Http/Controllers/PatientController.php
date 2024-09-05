@@ -236,7 +236,7 @@ class PatientController extends Controller
         if($attachment && $attachment->id){
             
             // Delete the file from storage
-            if (Storage::disk('public')->exists($attachment->url)) {
+            if(Storage::disk('public')->exists($attachment->url)) {
                 Storage::disk('public')->delete($attachment->url);
             }
 
