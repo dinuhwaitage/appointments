@@ -227,6 +227,29 @@ class PatientController extends Controller
          return response()->json(['message' => 'Patient deleted successfully'], 200);
     }
 
+    public function file_delete($patient, $id)
+    {
+        // Find the attachment by ID
+        $attachment = $patient->assets()->find($id)
+
+        // Check if the attachment exists
+        if ($attachment) {
+            
+            // Delete the file from storage
+            if (Storage::disk('public')->exists($attachment->url)) {
+                Storage::disk('public')->delete($attachment->url);
+            }
+
+            // Delete the record from the database
+            $attachment->delete();
+
+            return true; //response()->json(['message' => 'Attachment deleted successfully'], 200);
+
+        }else{
+            return false; //return response()->json(['message' => 'Attachment not found'], 404);
+        }
+    }
+
     
      /**
      * Display a listing of the uploads resource.
@@ -240,21 +263,36 @@ class PatientController extends Controller
         if ($patient && $request->hasFile('assets')) {
 
             foreach ($request->file('assets') as $photo) {
-                //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
+                
                 $photoPath = $photo->store('assets/'.$patient->clinic_id.'/'.$patient->id.'/patients', 'public');
 
                 // Generate the URL for the uploaded file
                 $url = Storage::url($photoPath);
 
+                
+                $file_name = $photo->getClientOriginalName(); // Create a unique filename
+                $mime_type = $photo->getClientMimeType(), // Get the MIME type
+                $file_size = $photo->getSize(), // Optionally, store the file size
+
                 // Store the file in the 'public/room_photos' directory under a unique filename
                 //$filePath = $file->storeAs('room_photos', $filename, 'public');
 
-               $success =  $patient->assets()->create(['url' => $url, 'clinic_id' => $patient->clinic_id]);
+               $success =  $patient->assets()->create(['url' => $url, 'clinic_id' => $patient->clinic_id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
             }
 
+            $deleteted = null;
+            if($request->has('assets')){
+                foreach($request->('assets') as $asset){
+                    if($asset->id && $asset->_destroy){
+                        $deleteted = $this->file_delete($patient, $asset->id);
+                    }
+                }
+            }
+            
+
             // Return a JSON response
-            if($success){
-                return response()->json(['message' => 'Patient attachment uploaded successfully'], 200);
+            if($success || $deleteted){
+                return response()->json($patient, 200);
             }else{
                 return response()->json(['message' => 'server error'], 500);
             }
