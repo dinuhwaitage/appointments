@@ -14,7 +14,7 @@ class AddFileTypeToAssets extends Migration
     public function up()
     {
         Schema::table('assets', function (Blueprint $table) {
-            $table->string('file_name')->nullable()
+            $table->string('file_name')->nullable();
             $table->string('mime_type')->nullable();
             $table->integer('file_size')->nullable(); // optional to store file size
         });
