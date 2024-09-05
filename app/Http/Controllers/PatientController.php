@@ -230,7 +230,7 @@ class PatientController extends Controller
     public function file_delete($patient, $id)
     {
         // Find the attachment by ID
-        $attachment = $patient->assets()->find($id)
+        $attachment = $patient->assets()->find($id);
 
         // Check if the attachment exists
         if($attachment && $attachment->id){

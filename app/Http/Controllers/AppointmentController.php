@@ -180,7 +180,7 @@ class AppointmentController extends Controller
     public function file_delete($appointment, $id)
     {
         // Find the attachment by ID
-        $attachment = $appointment->assets()->find($id)
+        $attachment = $appointment->assets()->find($id);
 
         // Check if the attachment exists
         if($attachment && $attachment->id){
