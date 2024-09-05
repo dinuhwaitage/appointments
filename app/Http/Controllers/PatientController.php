@@ -271,8 +271,8 @@ class PatientController extends Controller
 
                 
                 $file_name = $photo->getClientOriginalName(); // Create a unique filename
-                $mime_type = $photo->getClientMimeType(), // Get the MIME type
-                $file_size = $photo->getSize(), // Optionally, store the file size
+                $mime_type = $photo->getClientMimeType(); // Get the MIME type
+                $file_size = $photo->getSize(); // Optionally, store the file size
 
                 // Store the file in the 'public/room_photos' directory under a unique filename
                 //$filePath = $file->storeAs('room_photos', $filename, 'public');

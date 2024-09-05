@@ -214,8 +214,8 @@ class AppointmentController extends Controller
                 //$filePath = $file->storeAs('room_photos', $filename, 'public');
 
                 $file_name = $photo->getClientOriginalName(); // Create a unique filename
-                $mime_type = $photo->getClientMimeType(), // Get the MIME type
-                $file_size = $photo->getSize(), // Optionally, store the file size
+                $mime_type = $photo->getClientMimeType(); // Get the MIME type
+                $file_size = $photo->getSize(); // Optionally, store the file size
 
                 // Generate the URL for the uploaded file
                 $url = Storage::url($photoPath);
