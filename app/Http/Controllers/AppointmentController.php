@@ -199,7 +199,7 @@ class AppointmentController extends Controller
         }
     }
 
-    private function uploads(Request $request, $id)
+    public function uploads(Request $request, $id)
     {
          // Find the 
          $appointment = Auth::user()->clinic->appointments->find($id);
