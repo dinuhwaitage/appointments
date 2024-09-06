@@ -283,7 +283,7 @@ class PatientController extends Controller
             $deleteted = null;
             if($request->has('assets')){
                 foreach($request->assets as $asset){
-                    if($asset->id && $asset->_destroy){
+                    if($asset->id && $asset->destroy){
                         $deleteted = $this->file_delete($patient, $asset->id);
                     }
                 }
