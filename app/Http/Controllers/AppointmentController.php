@@ -154,8 +154,8 @@ class AppointmentController extends Controller
           $deleteted = null;
           if($request->has('assets')){
               foreach($request->assets as $asset){
-                  if($asset->id && $asset->destroy){
-                      $deleteted = $this->file_delete($appointment, $asset->id);
+                  if($asset['id'] && $asset['destroy']){
+                      $deleteted = $this->file_delete($appointment, $asset['id']);
                   }
               }
           }
@@ -235,8 +235,8 @@ class AppointmentController extends Controller
             $deleteted = null;
             if($request->has('assets')){
                 foreach($request->assets as $asset){
-                    if($asset->id && $asset->destroy){
-                        $deleteted = $this->file_delete($appointment, $asset->id);
+                    if($asset['id']&& $asset['destroy']){
+                        $deleteted = $this->file_delete($appointment, $asset['id']);
                     }
                 }
             }
