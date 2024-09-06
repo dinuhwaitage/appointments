@@ -10,6 +10,7 @@ use App\Models\Clinic;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ClinicController extends Controller
 {
@@ -104,6 +105,39 @@ class ClinicController extends Controller
         }
 
        
+    }
+
+    public function upload_logo(Request $request, $id)
+    {
+         // Find the 
+         $clinic = Auth::user()->clinic;
+
+        if ($clinic && $request->hasFile('logo') && $request->file('logo')) {
+                $photo = $request->file('logo');
+                //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
+                $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/logo', 'public');
+
+                // Store the file in the 'public/room_photos' directory under a unique filename
+                //$filePath = $file->storeAs('room_photos', $filename, 'public');
+
+                $file_name = $photo->getClientOriginalName(); // Create a unique filename
+                $mime_type = $photo->getClientMimeType(); // Get the MIME type
+                $file_size = $photo->getSize(); // Optionally, store the file size
+
+                // Generate the URL for the uploaded file
+                $url = Storage::url($photoPath);
+
+                $clinic = $clinic->logo()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
+                // Return a JSON response
+                if($success){
+                    return response()->json($clinic, 200);
+                }else{
+                    return response()->json(['message' => 'unable to upload logo'], 500);
+                }
+
+        }else{
+            return response()->json(['message' => 'unable to upload logo'], 404);
+        }
     }
 
     /**

@@ -56,6 +56,11 @@ class Clinic extends Model
         return $this->morphMany(Asset::class, 'imageable');
     }
 
+    public function logo()
+    {
+        return $this->morphOne(Asset::class, 'addressable');
+    }
+
     public function is_active(){
         return $this->status == 'ACTIVE';
     }

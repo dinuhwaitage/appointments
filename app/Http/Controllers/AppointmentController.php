@@ -151,6 +151,15 @@ class AppointmentController extends Controller
           // Update employee details
           $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id']));
 
+          $deleteted = null;
+          if($request->has('assets')){
+              foreach($request->assets as $asset){
+                  if($asset->id && $asset->destroy){
+                      $deleteted = $this->file_delete($appointment, $asset->id);
+                  }
+              }
+          }
+
           return response()->json($appointment, 200);
   
     }
@@ -227,7 +236,7 @@ class AppointmentController extends Controller
             if($request->has('assets')){
                 foreach($request->assets as $asset){
                     if($asset->id && $asset->destroy){
-                        $deleteted = $this->file_delete($patient, $asset->id);
+                        $deleteted = $this->file_delete($appointment, $asset->id);
                     }
                 }
             }
