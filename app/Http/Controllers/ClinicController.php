@@ -133,11 +133,7 @@ class ClinicController extends Controller
 
                 $clinic = $clinic->logo()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
                 // Return a JSON response
-                if($success){
-                    return response()->json($clinic, 200);
-                }else{
-                    return response()->json(['message' => 'unable to upload logo'], 500);
-                }
+                return response()->json($clinic, 200);
 
         }else{
             return response()->json(['message' => 'unable to upload logo'], 404);
