@@ -94,8 +94,9 @@ class PatientController extends Controller
             $request['email'] = $request->contact['email'];
         }else{
             // Generate a 5-character random string
-            $first_name = str_replace(' ', '', $request->contact['first_name']);
-            $request['email'] = $first_name.$this->generateRandomString(10)."@gmail.com";
+            $name = ($request->contact['name']) ? $request->contact['name'] : $request->contact['first_name'];
+            $name = str_replace(' ', '', $name);
+            $request['email'] = $name.$this->generateRandomString(5)."@gmail.com";
         }
         $request['clinic_id'] = $clinic_id;
 
@@ -112,7 +113,7 @@ class PatientController extends Controller
         ]);
         $pass = $request->password ? $request->password : 'Test@1234';
         $user = User::create([
-            'name' => $request->contact['first_name']." ".$request->contact['last_name'],
+            'name' => $request->contact['name'],
             'email' => $request->email,
             'clinic_id' => $clinic_id,
             'password' => Hash::make($pass),

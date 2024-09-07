@@ -23,7 +23,7 @@ class AppointmentSlimResource extends JsonResource
             'status' => $this->status,
             'patient' =>[ 
                 'id' =>  optional($this->patient)->id,
-                'name' => optional(optional($this->patient)->contact)->getFullName(),
+                'name' => optional(optional($this->patient)->contact)->name,
             ],
             'doctor' => [ 
                 'id' =>  optional($this->doctor)->id,

@@ -24,7 +24,7 @@ class InvoiceDetailResource extends JsonResource
             'status' => $this->status,
             'patient' =>[ 
                 'id' =>  optional($this->patient)->id,
-                'name' => optional($this->patient->contact)->getFullName(),
+                'name' => optional($this->patient->contact)->name
             ],
             'clinic' =>[
                 'id' => $this->clinic->id,
