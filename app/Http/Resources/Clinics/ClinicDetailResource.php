@@ -25,7 +25,13 @@ class ClinicDetailResource extends JsonResource
             'logo_url' => $this->logo_url,
             'registration_date' => $this->registration_date,
             'gst_number' => $this->gst_number,
-            'logo' => $this->logo,
+            'logo' =>   [
+                'id' =>  optional($this->logo)->id,
+                'mime_type' =>  optional($this->logo)->mime_type,
+                'file_name' =>  optional($this->logo)->file_name,
+                'file_size' =>  optional($this->logo)->file_size,
+                'url' =>  optional($this->logo)->url
+            ],
             'assets' => $this->assets,
             'address' =>  [
                 'id' => optional($this->address)->id,
