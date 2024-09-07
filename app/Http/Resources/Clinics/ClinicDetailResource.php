@@ -25,6 +25,7 @@ class ClinicDetailResource extends JsonResource
             'logo_url' => $this->logo_url,
             'registration_date' => $this->registration_date,
             'gst_number' => $this->gst_number,
+            'logo' => $this->logo,
             'assets' => $this->assets,
             'address' =>  [
                 'id' => optional($this->address)->id,

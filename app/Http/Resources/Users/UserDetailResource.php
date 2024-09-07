@@ -36,6 +36,7 @@ class UserDetailResource extends JsonResource
                 'name' => $this->clinic->name,
                 'city' =>  optional(optional($this->clinic)->address)->city,
                 'logo_url' => $this->clinic->logo_url,
+                'logo' => $this->clinic->logo,
             ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
