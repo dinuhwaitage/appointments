@@ -37,11 +37,11 @@ class UserDetailResource extends JsonResource
                 'city' =>  optional(optional($this->clinic)->address)->city,
                 'logo_url' => $this->clinic->logo_url,
                 'logo' =>   [
-                    'id' =>  optional($this->clinic->logo)->id,
-                    'mime_type' =>  optional($this->clinic->logo)->mime_type,
-                    'file_name' =>  optional($this->clinic->logo)->file_name,
-                    'file_size' =>  optional($this->clinic->logo)->file_size,
-                    'url' =>  optional($this->clinic->logo)->url
+                    'id' =>  optional(optional($this->clinic)->logo)->id,
+                    'mime_type' =>  optional(optional($this->clinic)->logo)->mime_type,
+                    'file_name' =>  optional(optional($this->clinic)->logo)->file_name,
+                    'file_size' =>  optional(optional($this->clinic)->logo)->file_size,
+                    'url' =>  optional(optional($this->clinic)->logo)->url
                 ],
             ],
             'created_at' => $this->created_at,
