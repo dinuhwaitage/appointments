@@ -109,6 +109,10 @@ class ClinicController extends Controller
 
     public function upload_logo(Request $request, $id)
     {
+        $request->validate([
+            'logo' => 'required|file|mimes:jpg,png,jpeg|max:2048',
+        ]);
+
          // Find the 
          $clinic = Auth::user()->clinic;
 
