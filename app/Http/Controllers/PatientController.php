@@ -288,23 +288,10 @@ class PatientController extends Controller
 
                $success =  $patient->assets()->create(['url' => $url, 'clinic_id' => $patient->clinic_id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
             }
-
-            $deleteted = null;
-            if($request->has('assets')){
-                foreach($request->assets as $asset){
-                    if($asset['id'] && $asset['destroy']){
-                        $deleteted = $this->file_delete($patient, $asset['id']);
-                    }
-                }
-            }
             
 
             // Return a JSON response
-            if($success || $deleteted){
-                return response()->json($patient, 200);
-            }else{
-                return response()->json(['message' => 'server error'], 500);
-            }
+            return response()->json($patient, 200);
             
         }else{
             return response()->json(['message' => 'Record not found'], 404);
