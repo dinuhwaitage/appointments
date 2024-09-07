@@ -233,21 +233,10 @@ class AppointmentController extends Controller
                 $success = $appointment->assets()->create(['url' => $url, 'clinic_id' => $appointment->clinic_id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
             }
 
-            $deleteted = null;
-            if($request->has('assets')){
-                foreach($request->assets as $asset){
-                    if($asset['id']&& $asset['destroy']){
-                        $deleteted = $this->file_delete($appointment, $asset['id']);
-                    }
-                }
-            }
-
             // Return a JSON response
-            if($success || $deleteted){
-                return response()->json($appointment, 200);
-            }else{
-                return response()->json(['message' => 'unable to upload attachments'], 500);
-            }
+            
+             return response()->json($appointment, 200);
+           
         }else{
             return response()->json(['message' => 'unable to upload attachments'], 404);
         }
