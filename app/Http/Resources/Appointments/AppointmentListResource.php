@@ -21,6 +21,7 @@ class AppointmentListResource extends JsonResource
             'details' => $this->details,
             'status' => $this->status,
             'diagnosis' => $this->diagnosis,
+            'doctor_note'=> $this->doctor_note,
             'fee' => $this->fee,
             'patient' =>[ 
                 'id' =>  optional($this->patient)->id,

@@ -141,15 +141,16 @@ class AppointmentController extends Controller
     {
          // Validate the request
          $request->validate([
-            'details' => 'string|max:255',
-            'date' => 'date',
+            'details' => 'nullable|string|max:255',
+            'doctor_note' => 'nullable|string',
+            'date' => 'required|date'
         ]);
 
           // Find the 
           $appointment = Auth::user()->clinic->appointments->find($id);
 
           // Update employee details
-          $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id']));
+          $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id','doctor_note']));
 
           $deleteted = null;
           if($request->has('assets')){
