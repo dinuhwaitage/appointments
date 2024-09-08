@@ -220,14 +220,14 @@ class AppointmentController extends Controller
                 foreach ($request->file('assets') as $photo) {
                 
                      // Define the file path and save the file
-                     $filePath = 'assets/'.$appointment->clinic_id.'/appointments/' . time() . '_' . $photo->getClientOriginalName();
-                     Storage::disk('public')->put($filePath, file_get_contents($photo));
+                    // $filePath = 'assets/'.$appointment->clinic_id.'/appointments/' . time() . '_' . $photo->getClientOriginalName();
+                     //Storage::disk('public')->put($filePath, file_get_contents($photo));
 
-                    //$photoPath = $photo->store('assets/'.$appointment->clinic_id.'/appointments', 'public');
+                    $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/35/patients', 'public');
     
                     // Generate the URL for the uploaded file
-                    //$url = Storage::url($photoPath);
-                    $url = $filePath;
+                    $url = Storage::url($photoPath);
+                    //$url = $filePath;
     
                     
                     $file_name = $photo->getClientOriginalName(); // Create a unique filename
