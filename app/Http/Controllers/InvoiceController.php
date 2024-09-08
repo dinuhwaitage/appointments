@@ -200,13 +200,13 @@ class InvoiceController extends Controller
         if ($startDate) {
             $query->where('payment_date', '>=', $startDate);
             $patient_query->where('created_at', '>=', $startDate);
-            $appointment_query->where('created_at', '>=', $startDate);
+            $appointment_query->where('date', '>=', $startDate);
         }
 
         if ($endDate) {
             $query->where('payment_date', '<=', $endDate);
             $patient_query->where('created_at', '<=', $endDate);
-            $appointment_query->where('created_at', '<=', $endDate);
+            $appointment_query->where('date', '<=', $endDate);
         };
         //$total_inv_query = $query;
         $cash_inv_query = clone  $query;
