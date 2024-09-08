@@ -213,32 +213,27 @@ class AppointmentController extends Controller
     {
          // Find the 
          $appointment = Auth::user()->clinic->appointments->find($id);
-
+print_r($appointment); exit();
         if ($appointment && $request->hasFile('assets')) {
             try {
 
-                foreach ($request->file('assets') as $photo) {
+            foreach ($request->file('assets') as $photo) {
                 
-                     // Define the file path and save the file
-                    // $filePath = 'assets/'.$appointment->clinic_id.'/appointments/' . time() . '_' . $photo->getClientOriginalName();
-                     //Storage::disk('public')->put($filePath, file_get_contents($photo));
+                //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
+                $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/'.$appointment->patient_id.'/appointments', 'public');
 
-                    $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/35/patients', 'public');
-    
-                    // Generate the URL for the uploaded file
-                    $url = Storage::url($photoPath);
-                    //$url = $filePath;
-    
-                    
-                    $file_name = $photo->getClientOriginalName(); // Create a unique filename
-                    $mime_type = $photo->getClientMimeType(); // Get the MIME type
-                    $file_size = $photo->getSize(); // Optionally, store the file size
-    
-                    // Store the file in the 'public/room_photos' directory under a unique filename
-                    //$filePath = $file->storeAs('room_photos', $filename, 'public');
-    
-                   $success =  $patient->assets()->create(['url' => $url, 'clinic_id' => $patient->clinic_id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
-                }
+                // Store the file in the 'public/room_photos' directory under a unique filename
+                //$filePath = $file->storeAs('room_photos', $filename, 'public');
+
+                $file_name = $photo->getClientOriginalName(); // Create a unique filename
+                $mime_type = $photo->getClientMimeType(); // Get the MIME type
+                $file_size = $photo->getSize(); // Optionally, store the file size
+
+                // Generate the URL for the uploaded file
+                $url = Storage::url($photoPath);
+
+                $success = $appointment->assets()->create(['url' => $url, 'clinic_id' => $appointment->clinic_id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
+            }
 
             // Return a JSON response
              return response()->json($appointment, 200);
