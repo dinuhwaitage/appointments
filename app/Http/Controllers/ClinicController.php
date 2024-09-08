@@ -107,6 +107,29 @@ class ClinicController extends Controller
        
     }
 
+
+    public function file_delete($clinic, $id)
+    {
+        // Find the attachment by ID
+        $attachment = $clinic->logo()->find($id);
+
+        // Check if the attachment exists
+        if($attachment && $attachment->id){
+            // Delete the file from storage
+            if (Storage::disk('public')->exists($attachment->url)) {
+                Storage::disk('public')->delete($attachment->url);
+            }
+
+            // Delete the record from the database
+            $attachment->delete();
+
+            return true; //response()->json(['message' => 'Attachment deleted successfully'], 200);
+
+        }else{
+            return false; //return response()->json(['message' => 'Attachment not found'], 404);
+        }
+    }
+
     public function upload_logo(Request $request, $id)
     {
     /*     $request->validate([
@@ -131,6 +154,10 @@ class ClinicController extends Controller
 
                 // Generate the URL for the uploaded file
                 $url = Storage::url($photoPath);
+                
+                if($clinic->logo){
+                    $deleteted = $this->file_delete($clinic, $clinic->logo->id);
+                }
 
                 $clinic = $clinic->logo()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
                 // Return a JSON response
