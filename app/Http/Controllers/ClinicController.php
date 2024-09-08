@@ -120,7 +120,7 @@ class ClinicController extends Controller
             try {
                 $photo = $request->file('logo');
                 //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
-                $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/logo', 'public');
+                $photoPath = $photo->store('assets/'.$clinic->id.'/logo', 'public');
 
                 // Store the file in the 'public/room_photos' directory under a unique filename
                 //$filePath = $file->storeAs('room_photos', $filename, 'public');
