@@ -217,26 +217,25 @@ class AppointmentController extends Controller
         if ($appointment && $request->hasFile('assets')) {
             try {
 
-            foreach ($request->file('assets') as $photo) {
+                foreach ($request->file('assets') as $photo) {
                 
-                //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
-                $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/'.$appointment->patient_id.'/appointments', 'public');
-
-                // Store the file in the 'public/room_photos' directory under a unique filename
-                //$filePath = $file->storeAs('room_photos', $filename, 'public');
-
-                $file_name = $photo->getClientOriginalName(); // Create a unique filename
-                $mime_type = $photo->getClientMimeType(); // Get the MIME type
-                $file_size = $photo->getSize(); // Optionally, store the file size
-
-                // Generate the URL for the uploaded file
-                $url = Storage::url($photoPath);
-
-                $success = $appointment->assets()->create(['url' => $url, 'clinic_id' => $appointment->clinic_id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
-            }
+                    $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/appointments', 'public');
+    
+                    // Generate the URL for the uploaded file
+                    $url = Storage::url($photoPath);
+    
+                    
+                    $file_name = $photo->getClientOriginalName(); // Create a unique filename
+                    $mime_type = $photo->getClientMimeType(); // Get the MIME type
+                    $file_size = $photo->getSize(); // Optionally, store the file size
+    
+                    // Store the file in the 'public/room_photos' directory under a unique filename
+                    //$filePath = $file->storeAs('room_photos', $filename, 'public');
+    
+                   $success =  $patient->assets()->create(['url' => $url, 'clinic_id' => $patient->clinic_id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
+                }
 
             // Return a JSON response
-            
              return response()->json($appointment, 200);
         } catch (Exception $e) {
             // Catch any errors and return error message
