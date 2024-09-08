@@ -143,7 +143,7 @@ class AppointmentController extends Controller
          $request->validate([
             'details' => 'nullable|string|max:255',
             'doctor_note' => 'nullable|string',
-            'date' => 'required|date'
+            'date' => 'nullable|date'
         ]);
 
           // Find the 
