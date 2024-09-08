@@ -213,7 +213,7 @@ class AppointmentController extends Controller
     {
          // Find the 
          $appointment = Auth::user()->clinic->appointments->find($id);
-print_r($appointment); exit();
+
         if ($appointment && $request->hasFile('assets')) {
             try {
 
