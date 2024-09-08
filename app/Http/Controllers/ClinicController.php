@@ -155,11 +155,13 @@ class ClinicController extends Controller
                 // Generate the URL for the uploaded file
                 $url = Storage::url($photoPath);
                 
-                if($clinic->logo){
-                    $deleteted = $this->file_delete($clinic, $clinic->logo->id);
+                while($clinic->logo){
+                    if($clinic->logo){
+                        $deleteted = $this->file_delete($clinic, $clinic->logo->id);
+                    }
                 }
 
-                $clinic = $clinic->logo()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
+                $clinic->logo()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
                 // Return a JSON response
                 return response()->json($clinic, 200);
             } catch (Exception $e) {
