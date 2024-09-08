@@ -117,6 +117,7 @@ class ClinicController extends Controller
          $clinic = Auth::user()->clinic;
 
         if ($clinic && $request->hasFile('logo') && $request->file('logo')) {
+            try {
                 $photo = $request->file('logo');
                 //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
                 $photoPath = $photo->store('assets/'.$appointment->clinic_id.'/logo', 'public');
@@ -134,6 +135,10 @@ class ClinicController extends Controller
                 $clinic = $clinic->logo()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
                 // Return a JSON response
                 return response()->json($clinic, 200);
+            } catch (Exception $e) {
+                // Catch any errors and return error message
+                return response()->json(['error' => 'File upload failed: ' . $e->getMessage()], 500);
+            }
 
         }else{
             return response()->json(['message' => 'unable to upload logo'], 404);

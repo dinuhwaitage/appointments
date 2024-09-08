@@ -215,6 +215,8 @@ class AppointmentController extends Controller
          $appointment = Auth::user()->clinic->appointments->find($id);
 
         if ($appointment && $request->hasFile('assets')) {
+            try {
+
             foreach ($request->file('assets') as $photo) {
                 
                 //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
@@ -236,6 +238,10 @@ class AppointmentController extends Controller
             // Return a JSON response
             
              return response()->json($appointment, 200);
+        } catch (Exception $e) {
+            // Catch any errors and return error message
+            return response()->json(['error' => 'File upload failed: ' . $e->getMessage()], 500);
+        }
            
         }else{
             return response()->json(['message' => 'unable to upload attachments'], 404);
