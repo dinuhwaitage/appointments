@@ -152,10 +152,9 @@ class AppointmentController extends Controller
           // Update employee details
           $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id','doctor_note']));
 
-          $deleteted = null;
           if($request->has('assets')){
               foreach($request->assets as $asset){
-                  if($asset['id'] && $asset['destroy']){
+                  if($asset && optional($asset['id']) && optional($asset['destroy'])){
                       $deleteted = $this->file_delete($appointment, $asset['id']);
                   }
               }
