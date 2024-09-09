@@ -154,7 +154,7 @@ class AppointmentController extends Controller
 
           if($request->has('assets')){
               foreach($request->assets as $asset){
-                  if($asset && optional($asset['id']) && optional($asset['destroy'])){
+                  if($asset &&  $asset->has('id') && $asset->has('destroy')){
                       $deleteted = $this->file_delete($appointment, $asset['id']);
                   }
               }
