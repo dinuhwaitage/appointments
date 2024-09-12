@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Appointments\AppointmentDetailResource;
 use App\Http\Resources\Appointments\AppointmentListResource;
 use App\Http\Resources\Appointments\AppointmentSlimResource;
+use App\Http\Resources\Appointments\AppointmentHistoryResource;
+use App\Http\Resources\Appointments\AppointmentAssetsResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Models\Appointment;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +27,9 @@ class AppointmentController extends Controller
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'days' => 'nullable|integer',
             'patient_id' => 'nullable|integer',
-            'doctor_id' => 'nullable|integer'
+            'doctor_id' => 'nullable|integer',
+            'history' => 'nullable',
+            'assets' => 'nullable'
         ]);
        
 
@@ -70,7 +74,14 @@ class AppointmentController extends Controller
         }
          // Get the filtered appointments
          $appointments = $query->get();
-        return AppointmentListResource::collection($appointments);
+
+         if($request->query('history') == true){
+            return AppointmentHistoryResource::collection($appointments);
+         }else if($request->query('assets') == true){
+            return AppointmentAssetsResource::collection($appointments);
+         }else{
+            return AppointmentListResource::collection($appointments);
+         }
     }
 
         /**
