@@ -114,7 +114,10 @@ class PatientController extends Controller
             'registration_date'  => 'nullable|date',
             'package_start_date'  => 'nullable|date',
             'address' => 'array',
-            'contact' => 'required|array'
+            'contact' => 'required|array',
+            'number'  => 'nullable|string', 
+            'package_end_date' => 'nullable|date',
+            'abha_number' => 'nullable|string'
         ]);
         $pass = $request->password ? $request->password : 'Test@1234';
         $user = User::create([
@@ -141,7 +144,7 @@ class PatientController extends Controller
             $request['registration_date'] = date("Y-m-d");
         }
         // Create the patient
-        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date']));
+        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date','number','package_end_date','abha_number']));
 
 
         if ($request->has('address')) {
@@ -178,14 +181,17 @@ class PatientController extends Controller
         $request->validate([
             'description' => 'string|max:255',
             'address' => 'array',
-            'contact' => 'array'
+            'contact' => 'array',
+            'number'  => 'nullable|string', 
+            'package_end_date' => 'nullable|date',
+            'abha_number' => 'nullable|string'
         ]);
 
         // Find the patient
         $patient = Auth::user()->clinic->patients->find($id);
 
         // Update patient details
-        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date']));
+        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date','number','package_end_date','abha_number']));
 
 
         // Update address details if provided
@@ -212,7 +218,7 @@ class PatientController extends Controller
         $deleteted = null;
         if($request->has('assets')){
             foreach($request->assets as $asset){
-                if($asset['id'] && $asset['destroy']){
+                if($asset['id'] && optional($asset)['destroy']){
                     $deleteted = $this->file_delete($patient, $asset['id']);
                 }
             }

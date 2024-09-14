@@ -22,6 +22,9 @@ class PatientDetailResource extends JsonResource
             'registration_date' => $this->registration_date,
             'package_start_date' => $this->package_start_date,
             'assets' => $this->assets,
+            'number' => $this->number,
+            'package_end_date' => $this->package_end_date,
+            'abha_number' => $this->abha_number,
             'package' =>[
                 'id' => optional($this->package)->id,
                 'name' => optional($this->package)->name,
