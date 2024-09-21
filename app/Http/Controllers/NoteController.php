@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Medicines\MedicineDetailResource;
-use App\Http\Resources\Medicines\MedicineListResource;
+use App\Http\Resources\Notes\NoteDetailResource;
+use App\Http\Resources\Notes\NoteListResource;
 use App\Models\Note;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
-class MedicineController extends Controller
+class NoteController extends Controller
 {
     
     /**
@@ -20,7 +20,7 @@ class MedicineController extends Controller
     public function index()
     {
         $notes = Auth::user()->clinic->notes;
-        return MedicineListResource::collection($notes);
+        return NoteListResource::collection($notes);
     }
 
     /**
@@ -56,7 +56,7 @@ class MedicineController extends Controller
     public function show($id)
     {
         $note = Auth::user()->clinic->notes->find($id);
-        return new MedicineDetailResource($note);
+        return new NoteDetailResource($note);
     }
 
     /**
