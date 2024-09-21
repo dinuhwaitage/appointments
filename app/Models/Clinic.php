@@ -51,6 +51,16 @@ class Clinic extends Model
         return $this->hasMany(Invoice::class, 'clinic_id');
     }
 
+    public function medicines()
+    {
+        return $this->hasMany(Medicine::class, 'clinic_id');
+    }
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class, 'clinic_id');
+    }
+
     public function assets()
     {
         return $this->morphMany(Asset::class, 'imageable');
