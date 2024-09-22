@@ -43,6 +43,13 @@ class UserDetailResource extends JsonResource
                     'file_size' =>  optional(optional($this->clinic)->logo)->file_size,
                     'url' =>  optional(optional($this->clinic)->logo)->url
                 ],
+            'favicon' =>   [
+                'id' =>  optional(optional($this->clinic)->favicon)->id,
+                'mime_type' =>  optional(optional($this->clinic)->favicon)->mime_type,
+                'file_name' =>  optional(optional($this->clinic)->favicon)->file_name,
+                'file_size' =>  optional(optional($this->clinic)->favicon)->file_size,
+                'url' =>  optional(optional($this->clinic)->favicon)->url
+            ]
             ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

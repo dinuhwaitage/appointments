@@ -68,7 +68,17 @@ class Clinic extends Model
 
     public function logo()
     {
-        return $this->morphOne(Asset::class, 'imageable');
+        return $this->morphOne(Asset::class, 'imageable')->where('type', 'LOGO');;
+    }
+
+    public function favicon()
+    {
+        return $this->morphOne(Asset::class, 'imageable')->where('type', 'FAVICON');;
+    }
+
+    public function scanner()
+    {
+        return $this->morphOne(Asset::class, 'imageable')->where('type', 'SCANNER');;
     }
 
     public function is_active(){

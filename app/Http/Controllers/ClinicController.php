@@ -159,7 +159,11 @@ class ClinicController extends Controller
                     $deleteted = $this->file_delete($clinic, $clinic->logo->id);
                 }
 
-                $clinic->logo()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size]);
+                $clinic->logo()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size,'type'=>'LOGO']);
+                
+                // Reload the employee model to get the latest data from the database
+                $clinic->refresh();
+
                 // Return a JSON response
                 return response()->json($clinic, 200);
             } catch (Exception $e) {
@@ -169,6 +173,96 @@ class ClinicController extends Controller
 
         }else{
             return response()->json(['message' => 'unable to upload logo'], 404);
+        }
+    }
+
+    public function upload_favicon(Request $request, $id)
+    {
+    /*     $request->validate([
+            'logo' => 'required|file|mimes:jpg,png,jpeg|max:2048',
+        ]); */
+
+         // Find the 
+         $clinic = Auth::user()->clinic;
+
+        if ($clinic && $request->hasFile('favicon') && $request->file('favicon')) {
+            try {
+                $photo = $request->file('favicon');
+                //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
+                $photoPath = $photo->store('assets/'.$clinic->id.'/favicon', 'public');
+
+                // Store the file in the 'public/room_photos' directory under a unique filename
+                //$filePath = $file->storeAs('room_photos', $filename, 'public');
+
+                $file_name = $photo->getClientOriginalName(); // Create a unique filename
+                $mime_type = $photo->getClientMimeType(); // Get the MIME type
+                $file_size = $photo->getSize(); // Optionally, store the file size
+
+                // Generate the URL for the uploaded file
+                $url = Storage::url($photoPath);
+                
+                if($clinic->favicon){
+                    $deleteted = $this->file_delete($clinic, $clinic->favicon->id);
+                }
+
+                $clinic->favicon()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size, 'type'=>'FAVICON']);
+                // Reload the employee model to get the latest data from the database
+                $clinic->refresh();
+
+                // Return a JSON response
+                return response()->json($clinic, 200);
+            } catch (Exception $e) {
+                // Catch any errors and return error message
+                return response()->json(['error' => 'File upload failed: ' . $e->getMessage()], 500);
+            }
+
+        }else{
+            return response()->json(['message' => 'unable to favicon logo'], 404);
+        }
+    }
+
+    public function upload_scanner(Request $request, $id)
+    {
+    /*     $request->validate([
+            'logo' => 'required|file|mimes:jpg,png,jpeg|max:2048',
+        ]); */
+
+         // Find the 
+         $clinic = Auth::user()->clinic;
+
+        if ($clinic && $request->hasFile('scanner') && $request->file('scanner')) {
+            try {
+                $photo = $request->file('scanner');
+                //$filename = time() . '_' . $photo->getClientOriginalName(); // Create a unique filename
+                $photoPath = $photo->store('assets/'.$clinic->id.'/scanner', 'public');
+
+                // Store the file in the 'public/room_photos' directory under a unique filename
+                //$filePath = $file->storeAs('room_photos', $filename, 'public');
+
+                $file_name = $photo->getClientOriginalName(); // Create a unique filename
+                $mime_type = $photo->getClientMimeType(); // Get the MIME type
+                $file_size = $photo->getSize(); // Optionally, store the file size
+
+                // Generate the URL for the uploaded file
+                $url = Storage::url($photoPath);
+                
+                if($clinic->scanner){
+                    $deleteted = $this->file_delete($clinic, $clinic->scanner->id);
+                }
+
+                $clinic->scanner()->create(['url' => $url, 'clinic_id' => $clinic->id, 'file_name'=> $file_name, 'mime_type'=> $mime_type, 'file_size'=> $file_size, 'type'=>'SCANNER']);
+                // Reload the employee model to get the latest data from the database
+                $clinic->refresh();
+
+                // Return a JSON response
+                return response()->json($clinic, 200);
+            } catch (Exception $e) {
+                // Catch any errors and return error message
+                return response()->json(['error' => 'File upload failed: ' . $e->getMessage()], 500);
+            }
+
+        }else{
+            return response()->json(['message' => 'unable to scanner'], 404);
         }
     }
 

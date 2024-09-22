@@ -32,6 +32,20 @@ class ClinicDetailResource extends JsonResource
                 'file_size' =>  optional($this->logo)->file_size,
                 'url' =>  optional($this->logo)->url
             ],
+            'favicon' =>   [
+                'id' =>  optional($this->favicon)->id,
+                'mime_type' =>  optional($this->favicon)->mime_type,
+                'file_name' =>  optional($this->favicon)->file_name,
+                'file_size' =>  optional($this->favicon)->file_size,
+                'url' =>  optional($this->favicon)->url
+            ],
+            'scanner' =>   [
+                'id' =>  optional($this->scanner)->id,
+                'mime_type' =>  optional($this->scanner)->mime_type,
+                'file_name' =>  optional($this->scanner)->file_name,
+                'file_size' =>  optional($this->scanner)->file_size,
+                'url' =>  optional($this->scanner)->url
+            ],
             'assets' => $this->assets,
             'address' =>  [
                 'id' => optional($this->address)->id,
