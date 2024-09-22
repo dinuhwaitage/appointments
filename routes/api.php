@@ -31,6 +31,8 @@ Route::middleware(['whitelist.host'])->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
        
+        Route::post('clinic_favicon_uploads/{id}', [ClinicController::class, 'upload_favicon']);
+        Route::post('clinic_scanner_uploads/{id}', [ClinicController::class, 'upload_scanner']);
         Route::post('patient_uploads/{id}', [PatientController::class, 'uploads']);
         Route::post('appointment_uploads/{id}', [AppointmentController::class, 'uploads']);
         Route::post('clinic_logo_uploads/{id}', [ClinicController::class, 'upload_logo']);
