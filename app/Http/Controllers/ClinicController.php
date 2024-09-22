@@ -111,7 +111,7 @@ class ClinicController extends Controller
     public function file_delete($clinic, $id)
     {
         // Find the attachment by ID
-        $attachment = $clinic->logo()->find($id);
+        $attachment = $clinic->assets()->find($id);
 
         // Check if the attachment exists
         if($attachment && $attachment->id){
