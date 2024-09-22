@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Clinic extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'number','email', 'phone','description','website','logo_url','registration_date','gst_number','status','type'];
+    protected $fillable = ['name', 'number','email', 'phone','description','website','logo_url','registration_date','gst_number','status'];
 
     public function users()
     {
