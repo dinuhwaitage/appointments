@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\MasterMedicines\MasterMedicinesListResource;
+use App\Http\Resources\MasterMedicines\MasterMedicineResource;
 use App\Models\MasterMedicine;
 use Illuminate\Http\Request;
 
