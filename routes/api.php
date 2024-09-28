@@ -11,6 +11,8 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\MasterMedicineController;
+use App\Http\Controllers\PrescriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,7 +48,9 @@ Route::middleware(['whitelist.host'])->group(function () {
         Route::patch('user_update/{id}', [ContactController::class, 'update']);
         Route::post('/users/admin_user', [UserController::class, 'admin_user']);
         Route::post('logout', [AuthController::class, 'logout']);
+        Route::apiResource('prescriptions', PrescriptionController::class);
         Route::apiResource('notes', NoteController::class);
+        Route::apiResource('master_medicines', MasterMedicineController::class);
         Route::apiResource('medicines', MedicineController::class);
         Route::apiResource('clinics', ClinicController::class);
         Route::apiResource('packages', PackageController::class);

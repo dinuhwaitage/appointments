@@ -35,4 +35,9 @@ class Appointment extends Model
         return $this->morphMany(Asset::class, 'imageable');
     }
 
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class, 'appointment_id');
+    }
+
 }
