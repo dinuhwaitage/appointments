@@ -18,6 +18,6 @@ class MasterMedicineController extends Controller
          // Validate the request
          $master_medicines = MasterMedicine::all();
         
-        return MasterMedicinesListResource::collection($master_medicines);
+        return MasterMedicineResource::collection($master_medicines);
     }
 }
