@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class MasterMedicine extends Model
 {
+    protected $fillable = ['name'];
     use HasFactory;
 }

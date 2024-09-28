@@ -15,6 +15,7 @@ class CreateMasterMedicines extends Migration
     {
         Schema::create('master_medicines', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
             $table->timestamps();
         });
     }
