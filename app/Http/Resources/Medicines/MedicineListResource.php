@@ -17,7 +17,8 @@ class MedicineListResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'status' => $this->status
+            'status' => $this->status,
+            'type' => $this->type
         ];
     }
 }

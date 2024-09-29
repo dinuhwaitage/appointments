@@ -42,7 +42,7 @@ class MedicineController extends Controller
 
         $request['status'] = $request['status']? $request['status'] : 'ACTIVE';
         // Create the medicine
-        $medicine = Medicine::create($request->only( ['name', 'status','clinic_id']));
+        $medicine = Medicine::create($request->only( ['name', 'status','clinic_id','type']));
 
         return response()->json($medicine, 201);
     }
@@ -77,7 +77,7 @@ class MedicineController extends Controller
         $medicine = Auth::user()->clinic->medicines->find($id);
 
         // Update employee details
-        $medicine->update($request->only( ['name', 'status']));
+        $medicine->update($request->only( ['name', 'status','type']));
 
         return response()->json($medicine, 200);
     }
