@@ -124,7 +124,7 @@ class AppointmentController extends Controller
 
         $request['clinic_id'] = Auth::user()->clinic_id;
         // Create the appointment
-        $appointment = Appointment::create($request->only( ['details','date','time','patient_id','doctor_id', 'status','clinic_id','diagnosis','fee','package_id']));
+        $appointment = Appointment::create($request->only( ['details','date','time','patient_id','doctor_id', 'status','clinic_id','diagnosis','fee','package_id','weight','height']));
 
         return response()->json($appointment, 201);
     }
@@ -161,7 +161,7 @@ class AppointmentController extends Controller
           $appointment = Auth::user()->clinic->appointments->find($id);
 
           // Update employee details
-          $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id','doctor_note']));
+          $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id','doctor_note','weight','height']));
 
           if($request->has('assets')){
               foreach($request->assets as $asset){

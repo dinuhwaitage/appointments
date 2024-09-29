@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Prescription extends Model
 {
-    protected $fillable = ['dosages', 'duration','qty','notes','patient_id','appointment_id','clinic_id'];
+    protected $fillable = ['medicine','dosages', 'duration','qty','notes','patient_id','appointment_id','clinic_id'];
     use HasFactory;
 
     public function clinic()

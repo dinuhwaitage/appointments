@@ -38,6 +38,7 @@ class PrescriptionController extends Controller
          $request->validate([
             'dosages' => 'nullable|string',
             'duration' => 'nullable|string',
+            'medicine' => 'nullable|string',
             'qty' => 'nullable|string',
             'notes' => 'nullable|string',
             'patient_id'  => 'required',
@@ -48,7 +49,7 @@ class PrescriptionController extends Controller
         $request['clinic_id'] = $clinic_id;
 
         // Create the prescription
-        $prescription = Prescription::create($request->only( ['dosages', 'duration','qty','notes','patient_id','appointment_id','clinic_id']));
+        $prescription = Prescription::create($request->only( ['medicine','dosages', 'duration','qty','notes','patient_id','appointment_id','clinic_id']));
 
         return response()->json($prescription, 201);
     }
@@ -77,6 +78,7 @@ class PrescriptionController extends Controller
          // Validate the request
          $request->validate([
             'dosages' => 'nullable|string',
+            'medicine' => 'nullable|string',
             'duration' => 'nullable|string',
             'qty' => 'nullable|string',
             'notes' => 'nullable|string'
@@ -86,7 +88,7 @@ class PrescriptionController extends Controller
         $prescription = Auth::user()->clinic->prescriptions->find($id);
 
         // Create the prescription
-        $prescription = $prescription->update($request->only( ['dosages', 'duration','qty','notes']));
+        $prescription->update($request->only( ['medicine','dosages', 'duration','qty','notes']));
 
         return response()->json($prescription, 200);
     }
