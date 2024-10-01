@@ -26,12 +26,16 @@ class Role extends Model
            return [
                 'Patient'=>["list","read","add","edit","delete"],
                 "Appointment"=>["list","read","add","edit","delete"],
-                "Invoice"=>["list","read","add","edit","delete"]
+                "Invoice"=>["list","read","add","edit","delete"],
+                "Prescription"=>["list","read"]
            ];
         }elseif($this->name == 'DOCTOR'){
             return [
                 "Appointment"=>["list","read","edit"],
-                "Patient"=>["list","read"]
+                "Patient"=>["list","read"],
+                "Note"=>["list","read","add","edit","delete"],
+                "Medicine"=>["list","read","add","edit","delete"],
+                "Prescription"=>["list","read","add","edit","delete"]
             ];
         }elseif($this->name == 'ADMIN'){
             return [
@@ -41,6 +45,9 @@ class Role extends Model
                 "Package"=>["list","read","add","edit","delete"],
                 "Employee"=>["list","read","add","edit","delete"],
                 "Doctor"=>["list","read","add","edit","delete"],
+                "Note"=>["list","read","add","edit","delete"],
+                "Medicine"=>["list","read","add","edit","delete"],
+                "Prescription"=>["list","read","add","edit","delete"],
                 "Report"=>["list","read"],
                 "Clinic"=>["dashboard","read","edit"]
             ];
@@ -52,6 +59,9 @@ class Role extends Model
                 "Package"=>["list","read","add","edit","delete"],
                 "Employee"=>["list","read","add","edit","delete"],
                 "Doctor"=>["list","read","add","edit","delete"],
+                "Note"=>["list","read","add","edit","delete"],
+                "Medicine"=>["list","read","add","edit","delete"],
+                "Prescription"=>["list","read","add","edit","delete"],
                 "Report"=>["list","read"],
                 "Clinic"=>["dashboard","read","edit"]
             ];

@@ -26,6 +26,7 @@ class AppointmentDetailResource extends JsonResource
             'assets' => $this->assets,
             'weight' => $this->weight,
             'height' => $this->height,
+            'seating_no' => $this->seating_no,
             'patient' =>[ 
                 'id' =>  optional($this->patient)->id,
                 'name' => optional($this->patient->contact)->name,

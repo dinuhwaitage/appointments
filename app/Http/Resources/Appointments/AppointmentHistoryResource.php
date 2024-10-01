@@ -22,6 +22,7 @@ class AppointmentHistoryResource extends JsonResource
             'status' => $this->status,
             'diagnosis' => $this->diagnosis,
             'doctor_note'=> $this->doctor_note,
+            'seating_no' => $this->seating_no,
             'patient_name' => optional(optional($this->patient)->contact)->name,
             'doctor_name' => optional(optional($this->doctor)->contact)->getFullName()
         ];
