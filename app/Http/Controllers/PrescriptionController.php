@@ -51,7 +51,7 @@ class PrescriptionController extends Controller
         $request['patient_id'] = $appointment->patient_id;
 
         // Create the prescription
-        $prescription = Prescription::create($request->only( ['medicine','dosages', 'duration','qty','notes','patient_id','appointment_id','clinic_id']));
+        $prescription = Prescription::create($request->only( ['medicine','dosages', 'duration','qty','notes','type','instruction','patient_id','appointment_id','clinic_id']));
 
         return response()->json($prescription, 201);
     }
@@ -90,7 +90,7 @@ class PrescriptionController extends Controller
         $prescription = Auth::user()->clinic->prescriptions->find($id);
 
         // Create the prescription
-        $prescription->update($request->only( ['medicine','dosages', 'duration','qty','notes']));
+        $prescription->update($request->only( ['medicine','dosages', 'duration','qty','notes','type','instruction']));
 
         return response()->json($prescription, 200);
     }

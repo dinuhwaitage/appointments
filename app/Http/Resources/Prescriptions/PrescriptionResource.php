@@ -21,7 +21,9 @@ class PrescriptionResource extends JsonResource
             'duration' => $this->duration,
             'qty' => $this->qty,
             'notes' => $this->notes,
-            'appointment' => $this->appointment
+            'appointment' => $this->appointment,
+            'type' => $this->type,
+            'instruction' => $this->instruction
         ];
     }
 }
