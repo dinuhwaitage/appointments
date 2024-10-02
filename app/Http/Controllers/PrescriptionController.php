@@ -41,12 +41,14 @@ class PrescriptionController extends Controller
             'medicine' => 'nullable|string',
             'qty' => 'nullable|string',
             'notes' => 'nullable|string',
-            'patient_id'  => 'required',
             'appointment_id'  => 'required'
         ]);
-        $clinic_id = Auth::user()->clinic_id; 
 
-        $request['clinic_id'] = $clinic_id;
+        $appointment = Auth::user()->clinic->appointments->find($request['appointment_id']);
+        $clinic_id = $appointment->clinic_id; 
+
+        $request['clinic_id'] = $appointment->clinic_id;
+        $request['patient_id'] = $appointment->patient_id;
 
         // Create the prescription
         $prescription = Prescription::create($request->only( ['medicine','dosages', 'duration','qty','notes','patient_id','appointment_id','clinic_id']));
