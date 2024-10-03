@@ -29,13 +29,15 @@ class AppointmentController extends Controller
             'patient_id' => 'nullable|integer',
             'doctor_id' => 'nullable|integer',
             'history' => 'nullable',
-            'assets' => 'nullable'
+            'assets' => 'nullable',
+            'status' => 'nullable|string',
         ]);
        
 
         // Get the start and end date from the request
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
+        $status = $request->query('status');
         $days = $request->query('days');
         
        
@@ -59,6 +61,10 @@ class AppointmentController extends Controller
      
         if($doctor_id){
             $query->where('doctor_id', $doctor_id);
+        }
+
+        if($status){
+            $query->where('status', $status);
         }
 
         if($patient_id){
