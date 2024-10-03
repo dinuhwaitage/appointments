@@ -43,7 +43,7 @@ class Patient extends Model
     public function package_appointments($package_id)
     {
         $pkg_id = $package_id ? $package_id : $this->package_id;
-        return $this->appoitments->where('package_id', $pkg_id);
+        return $this->appoitments->where('package_id', $pkg_id)->where('status','<>', 'CANCLED');
     }
 
     public function available_package_count($package_id = null)
