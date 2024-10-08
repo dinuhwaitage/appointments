@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DateTime;
 
 class Patient extends Model
 {
@@ -38,6 +39,23 @@ class Patient extends Model
     public function package()
     {
         return $this->belongsTo(Package::class, 'package_id');
+    }
+
+    public function is_expiring_soon()
+    {
+
+        if($this->package_end_date){
+
+            $datetime1 = new DateTime($this->package_end_date);
+            $datetime2 = new DateTime();
+            $interval = $datetime1->diff($datetime2);
+            $days = $interval->format('%a');//now do whatever you like with $days
+            return $days < 3;
+
+        }else{
+            return false;
+        }
+        
     }
 
     public function package_appointments($package_id)
