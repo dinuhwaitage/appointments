@@ -178,6 +178,16 @@ class AppointmentController extends Controller
           // Find the 
           $appointment = Auth::user()->clinic->appointments->find($id);
 
+          //packages
+          if($request['status'] == 'CANCLED' && $appointment->sattus != $request['status']){
+
+            $patient =  Auth::user()->clinic->patients->find($appointment->patient_id);
+            if($patient->package && $patient->package->id == $appointment->package_id && $patient->available_count){
+                $patient->available_count = $patient->available_count - 1;
+                $patient->save();
+             }
+        }
+
           // Update employee details
           $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id','doctor_note','weight','height','seating_no']));
 
