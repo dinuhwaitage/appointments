@@ -144,7 +144,7 @@ class PatientController extends Controller
             $request['registration_date'] = date("Y-m-d");
         }
         // Create the patient
-        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date','number','package_end_date','abha_number']));
+        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count']));
 
 
         if ($request->has('address')) {
@@ -191,7 +191,7 @@ class PatientController extends Controller
         $patient = Auth::user()->clinic->patients->find($id);
 
         // Update patient details
-        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date','number','package_end_date','abha_number']));
+        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count']));
 
 
         // Update address details if provided

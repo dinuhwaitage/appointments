@@ -131,12 +131,12 @@ class AppointmentController extends Controller
         $request['clinic_id'] = Auth::user()->clinic_id;
 
         if($patient->package && $patient->package->seating_count){
-            $available_count = $patient->available_package_count($patient->package->id);
+            $available_count = intval($patient->available_count);
             if($patient->package->seating_count >= $available_count){
                 $request['package_id'] = $patient->package->id;
                 $request['seating_no'] = ($patient->package->seating_count - $available_count) + 1;
-            }else{
-
+                $patient->available_count = $patient->package->seating_count - $request['seating_no'];
+                $patient->save();
             }
             
         }
