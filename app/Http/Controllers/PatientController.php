@@ -143,8 +143,15 @@ class PatientController extends Controller
         if(!$request['registration_date']){
             $request['registration_date'] = date("Y-m-d");
         }
+
+        if($request['package_id']){
+            $package = Auth::user()->clinic->packages->find(intval($request['package_id']));
+            if($package->seating_count){
+                $request['available_count'] = $package->seating_count;
+            }
+        }
         // Create the patient
-        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date','number','package_end_date','abha_number']));
+        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count']));
 
 
         if ($request->has('address')) {
@@ -190,8 +197,15 @@ class PatientController extends Controller
         // Find the patient
         $patient = Auth::user()->clinic->patients->find($id);
 
+        if($request['package_id']){
+            $package = Auth::user()->clinic->packages->find($request['package_id']);
+            if(($patient->package_id != $request['package_id'] || ($patient->package_start_date != $request['package_start_date'] && $patient->package_end_date != $request['package_end_date'])) && $package->seating_count){
+                $request['available_count'] = $package->seating_count;
+            }
+        }
+
         // Update patient details
-        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date','number','package_end_date','abha_number']));
+        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count']));
 
 
         // Update address details if provided
