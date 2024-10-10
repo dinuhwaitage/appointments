@@ -17,6 +17,7 @@ class PatientLkResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->contact->name,
+            'is_expiring_soon' => $this->is_expiring_soon()
         ];
     }
 }
