@@ -38,7 +38,8 @@ class AppointmentDetailResource extends JsonResource
                 'name' => optional($this->package)->name,
                 'seating_count' => optional($this->package)->seating_count,
                 'available_count' => (optional($this->package)->id)?$this->patient->available_package_count($this->package->id) : null,
-                'amount' => optional($this->package)->amount
+                'amount' => optional($this->package)->amount,
+                'is_expiring_soon' => optional($this->patient)->is_expiring_soon()
             ],
             'doctor' => [ 
                 'id' =>  optional($this->doctor)->id,
