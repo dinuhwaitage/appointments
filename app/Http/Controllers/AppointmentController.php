@@ -179,7 +179,7 @@ class AppointmentController extends Controller
           $appointment = Auth::user()->clinic->appointments->find($id);
 
           //packages
-          if($request['status'] == 'CANCLED' && $appointment->sattus != $request['status']){
+          if($request['status'] == 'CANCLED' && $appointment->status != $request['status']){
 
             $patient =  Auth::user()->clinic->patients->find($appointment->patient_id);
             if($patient->package && $patient->package->id == $appointment->package_id && $patient->available_count){
