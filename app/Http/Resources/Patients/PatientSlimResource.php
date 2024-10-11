@@ -17,6 +17,7 @@ class PatientSlimResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->contact->name,
+            'is_expiring_soon' => $this->is_expiring_soon(),
             'package' =>[
                 'id' => optional($this->package)->id,
                 'name' => optional($this->package)->name,
