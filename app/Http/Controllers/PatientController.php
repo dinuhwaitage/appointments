@@ -145,7 +145,7 @@ class PatientController extends Controller
         }
 
         if($request['package_id']){
-            $package = Auth::user()->clinic->packages->find(intval($request['package_id']));
+            $package = Auth::user()->clinic->packages->find($request['package_id']);
             if($package->seating_count){
                 $request['available_count'] = $package->seating_count;
             }
