@@ -121,8 +121,8 @@ class AppointmentController extends Controller
             'patient_id' => 'required'
         ]);
 
-
         $request['clinic_id'] = Auth::user()->clinic_id;
+        $patient =  Auth::user()->clinic->patients->find($request['patient_id']);
 
         if($patient->package && $patient->package->seating_count){
             $available_count = intval($patient->available_count);
