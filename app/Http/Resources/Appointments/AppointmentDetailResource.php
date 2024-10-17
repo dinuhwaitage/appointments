@@ -28,7 +28,8 @@ class AppointmentDetailResource extends JsonResource
                 'id' =>  optional($this->patient)->id,
                 'name' => optional($this->patient->contact)->name,
                 'date_of_birth' =>  optional($this->patient)->date_of_birth,
-                'gender' =>  optional($this->patient)->gender
+                'gender' =>  optional($this->patient)->gender,
+                'assets' => optional($this->patient)->assets
             ],
             'package' =>[
                 'id' => optional($this->package)->id,
