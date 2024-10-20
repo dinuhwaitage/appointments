@@ -4,7 +4,7 @@ namespace App\Http\Resources\Invoices;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class InvoiceDetailResource extends JsonResource
+class InvoicePrintResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -28,12 +28,19 @@ class InvoiceDetailResource extends JsonResource
                 'name' => optional($this->patient->contact)->name,
                 'mobile' => optional($this->patient->contact)->mobile
             ],
-            'clinic' =>[
-                'id' => $this->clinic->id,
-                'name' => $this->clinic->name
-            ],
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'clinic' =>[ 
+                'id' =>  $this->clinic->id,
+                'name' => $this->clinic->name,
+                'city' =>  optional(optional($this->clinic)->address)->city,
+                'logo_url' => $this->clinic->logo_url,
+                'logo' =>   [
+                    'id' =>  optional(optional($this->clinic)->logo)->id,
+                    'mime_type' =>  optional(optional($this->clinic)->logo)->mime_type,
+                    'file_name' =>  optional(optional($this->clinic)->logo)->file_name,
+                    'file_size' =>  optional(optional($this->clinic)->logo)->file_size,
+                    'url' =>  optional(optional($this->clinic)->logo)->url
+                ]
+                ]
         ];
     }
 }

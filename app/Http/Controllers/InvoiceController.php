@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Invoices\InvoiceDetailResource;
+use App\Http\Resources\Invoices\InvoicePrintResource;
 use App\Http\Resources\Invoices\InvoiceListResource;
 use App\Http\Resources\Invoices\ReportResource;
 use App\Models\User;
@@ -64,6 +65,10 @@ class InvoiceController extends Controller
 
         // Create the invoice
         $invoice = Invoice::create($request->only( ['amount', 'payment_date','paid_by','transaction_number','description','status','clinic_id','patient_id']));
+        $rand = random_strings(10);
+        $invoice->rnd_number = $invoice->id.".".$clinic_id.".".$rand;
+        $invoice->save();
+
         return response()->json($invoice, 201);
     }
 
@@ -238,5 +243,30 @@ class InvoiceController extends Controller
         ];
 
         return response()->json($stats);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Invoice  $invoice
+     * @return \Illuminate\Http\Response
+     */
+    public function print_invoice($id)
+    {
+        $str_id = explode(".",$id);
+        // Build the query
+        $query = Invoice::query();
+
+        $query->where('id', '=', $str_id[0]);
+        $query->where('clinic_id', '=', $str_id[1]);
+        $query->where('rnd_number', '=',$id);
+        $invoice = $query->get()->first();
+       // $temp_user = User::where('email', $credentials['email'])->first();
+       if($invoice){
+         return new InvoicePrintResource($invoice);
+       }else{
+        return response()->json(['message' => 'record not found'], 404);
+        }
+       
     }
 }
