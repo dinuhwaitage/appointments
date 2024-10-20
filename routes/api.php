@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['whitelist.host'])->group(function () {
     
     Route::post('login', [AuthController::class, 'login']);
+    Route::get('print_invoice/{id}', [InvoiceController::class, 'print_invoice']);
 
     Route::middleware('auth:sanctum')->group(function () {
        
