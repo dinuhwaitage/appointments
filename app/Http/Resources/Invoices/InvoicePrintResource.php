@@ -21,6 +21,7 @@ class InvoicePrintResource extends JsonResource
             'paid_by' => $this->paid_by,
             'description' => $this->description,
             'transaction_number' => $this->transaction_number,
+            'rnd_number' => $this->rnd_number,
             'status' => $this->status,
             'patient' =>[ 
                 'name' => optional($this->patient->contact)->name,
