@@ -85,7 +85,7 @@ class InvoiceController extends Controller
 
         if(!$invoice->rnd_number){
             $rand = Str::random(16);
-            $invoice->rnd_number = $invoice->id.".".$clinic_id.".".$rand;
+            $invoice->rnd_number = $invoice->id.".".$invoice->clinic_id.".".$rand;
             $invoice->save();
         }
 
