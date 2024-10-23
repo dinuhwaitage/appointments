@@ -66,7 +66,7 @@ class InvoiceController extends Controller
 
         // Create the invoice
         $invoice = Invoice::create($request->only( ['amount', 'payment_date','paid_by','transaction_number','description','status','clinic_id','patient_id']));
-        $rand = str()->random(16);
+        $rand = Str::random(16);
         $invoice->rnd_number = $invoice->id.".".$clinic_id.".".$rand;
         $invoice->save();
 
@@ -84,7 +84,7 @@ class InvoiceController extends Controller
         $invoice = Auth::user()->clinic->invoices->find($id);
 
         if(!$invoice->rnd_number){
-            $rand = str()->random(16);
+            $rand = Str::random(16);
             $invoice->rnd_number = $invoice->id.".".$clinic_id.".".$rand;
             $invoice->save();
         }
