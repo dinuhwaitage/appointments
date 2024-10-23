@@ -11,6 +11,7 @@ use App\Models\Patient;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class InvoiceController extends Controller
 {
@@ -64,6 +65,10 @@ class InvoiceController extends Controller
 
         // Create the invoice
         $invoice = Invoice::create($request->only( ['amount', 'payment_date','paid_by','transaction_number','description','status','clinic_id','patient_id']));
+        $rand = str()->random(16);
+        $invoice->rnd_number = $invoice->id.".".$clinic_id.".".$rand;
+        $invoice->save();
+
         return response()->json($invoice, 201);
     }
 
@@ -76,6 +81,13 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $invoice = Auth::user()->clinic->invoices->find($id);
+
+        if(!$invoice->rnd_number){
+            $rand = str()->random(16);
+            $invoice->rnd_number = $invoice->id.".".$clinic_id.".".$rand;
+            $invoice->save();
+        }
+
         return new InvoiceDetailResource($invoice);
     }
 
