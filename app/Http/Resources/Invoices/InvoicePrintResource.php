@@ -21,25 +21,33 @@ class InvoicePrintResource extends JsonResource
             'paid_by' => $this->paid_by,
             'description' => $this->description,
             'transaction_number' => $this->transaction_number,
-            'rnd_number' => $this->rnd_number,
             'status' => $this->status,
             'patient' =>[ 
-                'id' =>  optional($this->patient)->id,
                 'name' => optional($this->patient->contact)->name,
-                'mobile' => optional($this->patient->contact)->mobile
+                'mobile' => optional($this->patient->contact)->mobile,
+                'address' =>  [
+                    'line1' => optional($this->patient->address)->line1,
+                    'line2' => optional($this->patient->address)->line2,
+                    'city' => optional($this->patient->address)->city,
+                    'state' => optional($this->patient->address)->state,
+                    'zipcode' => optional($this->patient->address)->zipcode
+                ]
             ],
             'clinic' =>[ 
-                'id' =>  $this->clinic->id,
+                'email' => $this->clinic->email,
+                'phone' => $this->clinic->phone,
+                'website' => $this->clinic->website,
+                'number' => $this->clinic->number,
                 'name' => $this->clinic->name,
-                'city' =>  optional(optional($this->clinic)->address)->city,
-                'logo_url' => $this->clinic->logo_url,
-                'logo' =>   [
-                    'id' =>  optional(optional($this->clinic)->logo)->id,
-                    'mime_type' =>  optional(optional($this->clinic)->logo)->mime_type,
-                    'file_name' =>  optional(optional($this->clinic)->logo)->file_name,
-                    'file_size' =>  optional(optional($this->clinic)->logo)->file_size,
-                    'url' =>  optional(optional($this->clinic)->logo)->url
-                ]
+                'logo_url' =>  optional(optional($this->clinic)->logo)->url,
+                'scanner_url' =>  optional(optional($this->clinic)->scanner)->url,
+                'address' =>  [
+                    'line1' => optional($this->address)->line1,
+                    'line2' => optional($this->address)->line2,
+                    'city' => optional($this->address)->city,
+                    'state' => optional($this->address)->state,
+                    'zipcode' => optional($this->address)->zipcode
+                    ],
                 ]
         ];
     }
