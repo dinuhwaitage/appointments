@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     use HasFactory;
-    protected $fillable = ['amount', 'payment_date','paid_by','transaction_number','description','status','clinic_id','patient_id'];
+    protected $fillable = ['amount', 'payment_date','paid_by','transaction_number','description','status','clinic_id','patient_id','rnd_number'];
 
     public function clinic()
     {

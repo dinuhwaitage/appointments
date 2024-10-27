@@ -121,8 +121,19 @@ class AppointmentController extends Controller
             'patient_id' => 'required'
         ]);
 
-
         $request['clinic_id'] = Auth::user()->clinic_id;
+        $patient =  Auth::user()->clinic->patients->find($request['patient_id']);
+
+        if($patient->package && $patient->package->seating_count){
+            $available_count = intval($patient->available_count);
+            if($patient->package->seating_count >= $available_count){
+                $request['package_id'] = $patient->package->id;
+                $request['seating_no'] = ($patient->package->seating_count - $available_count) + 1;
+                $patient->available_count = $patient->package->seating_count - $request['seating_no'];
+                $patient->save();
+            }
+
+        }
         // Create the appointment
         $appointment = Appointment::create($request->only( ['details','date','time','patient_id','doctor_id', 'status','clinic_id','diagnosis','fee','package_id']));
 

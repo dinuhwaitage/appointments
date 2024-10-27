@@ -21,10 +21,12 @@ class InvoiceDetailResource extends JsonResource
             'paid_by' => $this->paid_by,
             'description' => $this->description,
             'transaction_number' => $this->transaction_number,
+            'rnd_number' => $this->rnd_number,
             'status' => $this->status,
             'patient' =>[ 
                 'id' =>  optional($this->patient)->id,
-                'name' => optional($this->patient->contact)->name
+                'name' => optional($this->patient->contact)->name,
+                'mobile' => optional($this->patient->contact)->mobile
             ],
             'clinic' =>[
                 'id' => $this->clinic->id,
