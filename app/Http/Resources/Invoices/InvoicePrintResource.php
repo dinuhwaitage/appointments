@@ -42,11 +42,11 @@ class InvoicePrintResource extends JsonResource
                 'logo_url' =>  optional(optional($this->clinic)->logo)->url,
                 'scanner_url' =>  optional(optional($this->clinic)->scanner)->url,
                 'address' =>  [
-                    'line1' => optional($this->address)->line1,
-                    'line2' => optional($this->address)->line2,
-                    'city' => optional($this->address)->city,
-                    'state' => optional($this->address)->state,
-                    'zipcode' => optional($this->address)->zipcode
+                    'line1' => optional(optional($this->clinic)->address)->line1,
+                    'line2' => optional(optional($this->clinic)->address)->line2,
+                    'city' => optional(optional($this->clinic)->address)->city,
+                    'state' => optional(optional($this->clinic)->address)->state,
+                    'zipcode' => optional(optional($this->clinic)->address)->zipcode
                     ],
                 ]
         ];
