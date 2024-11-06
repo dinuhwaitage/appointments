@@ -18,23 +18,24 @@ class WhitelistHost
     {
         // Define your whitelisted hosts
         $whitelistedHosts = [
-            'localhost:3000',
-            'localhost:3001',
-            'appointments.coderkeys.com'
+            'http://localhost:8000',
+            'https://app.doctoapp.in',
+            'https://app.ssghealthcare.in'
         ];
 
         // Get the host from the request
-        $host = $request->getHost();
+       // $host = $request->getHost();
+       $host = $request->getSchemeAndHttpHost(); 
 
         // Get the User-Agent from the request
         $userAgent = $request->header('User-Agent');
 
         // Check if the host is in the whitelist
          // Check if the User-Agent contains "PostmanRuntime"
-       /*  if (!in_array($host, $whitelistedHosts) && strpos($userAgent, 'PostmanRuntime') === false) {
+         if (!in_array($host, $whitelistedHosts) && strpos($userAgent, 'PostmanRuntime') === false) {
             // If not, return a 403 Forbidden response
             return response('Forbidden', 403);
-        } */
+        } 
 
         // If the host is whitelisted, proceed with the request
         return $next($request);
