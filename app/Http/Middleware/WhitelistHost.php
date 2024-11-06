@@ -19,8 +19,8 @@ class WhitelistHost
         // Define your whitelisted hosts
         $whitelistedHosts = [
             'http://localhost:8000',
-            'https://app.doctoapp.in',
-            'https://app.ssghealthcare.in'
+            'https://appointapi.profilelinks.in',
+            'https://studio_care_api.profilelinks.in'
         ];
 
         // Get the host from the request
