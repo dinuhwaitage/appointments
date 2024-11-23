@@ -18,21 +18,20 @@ class WhitelistHost
     {
         // Define your whitelisted hosts
         $whitelistedHosts = [
-            'http://localhost:8000',
-            'https://appointapi.profilelinks.in',
-            'https://studio_care_api.profilelinks.in'
+            'localhost',
+            'appointapi.profilelinks.in',
+            'studio_care_api.profilelinks.in'
         ];
-
-        // Get the host from the request
-       // $host = $request->getHost();
-       $host = $request->getSchemeAndHttpHost(); 
 
         // Get the User-Agent from the request
         $userAgent = $request->header('User-Agent');
 
+        // Get the origin domain from the request
+        $origin = parse_url($request->headers->get('origin'), PHP_URL_HOST);
+        
         // Check if the host is in the whitelist
          // Check if the User-Agent contains "PostmanRuntime"
-         if (!in_array($host, $whitelistedHosts) && strpos($userAgent, 'PostmanRuntime') === false) {
+         if (!in_array($origin, $whitelistedHosts) && strpos($userAgent, 'PostmanRuntime') === false) {
             // If not, return a 403 Forbidden response
             return response('Forbidden', 403);
         } 
