@@ -19,8 +19,7 @@ class WhitelistHost
         // Define your whitelisted hosts
         $whitelistedHosts = [
             'localhost',
-            'appointapi.profilelinks.in',
-            'studio_care_api.profilelinks.in'
+            'app.doctoapp.in'
         ];
 
         // Get the User-Agent from the request
