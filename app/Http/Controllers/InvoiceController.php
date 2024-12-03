@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\Invoice;
 use App\Models\Patient;
 use App\Models\Appointment;
+use App\Mail\SendEmailNotification;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -276,5 +278,27 @@ class InvoiceController extends Controller
         return response()->json(['message' => 'record not found'], 404);
         }
        
+    }
+
+
+    public function send_email(Request $request)
+    {
+        // Validate request data
+        $request->validate([
+            'email' => 'required|email',
+            'title' => 'required|string',
+            'body' => 'required|string'
+        ]);
+
+        // Prepare email details
+        $details = [
+            'title' => $request->title,
+            'body' => $request->body
+        ];
+
+        // Send email
+      $result =   Mail::to($request->email)->send(new SendEmailNotification($details));
+
+        return response()->json(['message' => 'Email sent successfully']);
     }
 }
