@@ -8,6 +8,7 @@ use App\Http\Resources\Appointments\AppointmentHistoryResource;
 use App\Http\Resources\Appointments\AppointmentAssetsResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Models\Appointment;
+use App\Models\AdditionalFee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -142,7 +143,7 @@ class AppointmentController extends Controller
         }
          
         // Create the appointment
-        $appointment = Appointment::create($request->only( ['details','date','time','patient_id','doctor_id', 'status','clinic_id','diagnosis','fee','package_id','weight','height','seating_no']));
+        $appointment = Appointment::create($request->only( ['details','date','time','patient_id','doctor_id', 'status','clinic_id','diagnosis','fee','package_id','weight','height','seating_no','bp_detail']));
 
         return response()->json($appointment, 201);
     }
@@ -172,7 +173,15 @@ class AppointmentController extends Controller
          $request->validate([
             'details' => 'nullable|string|max:255',
             'doctor_note' => 'nullable|string',
-            'date' => 'nullable|date'
+            'date' => 'nullable|date',
+            'bp_detail' => 'nullable|string',
+            'medical_history'  => 'nullable|string',
+            'family_medical_history'  => 'nullable|string',
+            'current_condition'  => 'nullable|string',
+            'observation_details'  => 'nullable|string',
+            'investigation_details'  => 'nullable|string',
+            'treatment_plan'  => 'nullable|string',
+            'procedures'  => 'nullable|string'
         ]);
 
           // Find the 
@@ -189,7 +198,7 @@ class AppointmentController extends Controller
         }
 
           // Update employee details
-          $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id','doctor_note','weight','height','seating_no']));
+          $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id','doctor_note','weight','height','seating_no','bp_detail','medical_history','family_medical_history','current_condition','observation_details','investigation_details','treatment_plan','procedures']));
 
           if($request->has('assets')){
               foreach($request->assets as $asset){
@@ -283,5 +292,45 @@ class AppointmentController extends Controller
         }else{
             return response()->json(['message' => 'unable to upload attachments'], 404);
         }
+    }
+
+    //add additional charges
+    public function additional_fee(Request $request, $appointment_id)
+    {
+        // Validate the request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'amount' => 'required|numeric',
+            'description' => 'nullable|string'
+        ]);
+         // Find the 
+         $appointment = Auth::user()->clinic->appointments->find($appointment_id);
+         if($appointment){
+        try {
+        if ($appointment && $request->id) {
+           
+             $fee = $appointment->additional_fees()->find($request->id);
+            
+            // Update employee details
+            $fee->update($request->only(['name','amount','description']));
+
+            // Return a JSON response
+             return response()->json($fee, 200);
+        }else{
+            $request['clinic_id'] = Auth::user()->clinic_id;
+            
+            // Update employee details
+            $fee = $appointment->additional_fees()->create($request->only(['name','amount','description', 'clinic_id']));
+
+            // Return a JSON response
+             return response()->json($fee, 201);
+        }
+        } catch (Exception $e) {
+            // Catch any errors and return error message
+            return response()->json(['error' => 'unable to add/update additional fee: ' . $e->getMessage()], 500);
+        }
+    }else{
+        return response()->json(['error' => 'patient not found '], 404);
+    }
     }
 }

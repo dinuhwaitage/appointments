@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Appointment extends Model
 {
     use HasFactory;
-    protected $fillable = ['details','date','time','patient_id','doctor_id', 'status','clinic_id','diagnosis','fee','package_id','doctor_note','weight','height','seating_no'];
+    protected $fillable = ['details','date','time','patient_id','doctor_id', 'status','clinic_id','diagnosis','fee','package_id','doctor_note','weight','height','seating_no','bp_detail','medical_history','family_medical_history','current_condition','observation_details','investigation_details','treatment_plan','procedures'];
 
     public function clinic()
     {
@@ -38,6 +38,11 @@ class Appointment extends Model
     public function prescriptions()
     {
         return $this->hasMany(Prescription::class, 'appointment_id');
+    }
+
+    public function additional_fees()
+    {
+        return $this->morphMany(AdditionalFee::class, 'additionable_fee');
     }
 
 }
