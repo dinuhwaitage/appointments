@@ -34,6 +34,7 @@ Route::middleware(['whitelist.host'])->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
        
+        Route::patch('/appointments/additional_fee/{appointment_id}', [AppointmentController::class, 'additional_fee']);
         Route::post('/invoices/send_email', [InvoiceController::class, 'send_email']);
         Route::post('clinic_favicon_uploads/{id}', [ClinicController::class, 'upload_favicon']);
         Route::post('clinic_scanner_uploads/{id}', [ClinicController::class, 'upload_scanner']);
