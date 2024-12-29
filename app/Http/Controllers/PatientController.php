@@ -199,8 +199,8 @@ class PatientController extends Controller
 
         if($request['package_id']){
             $package = Auth::user()->clinic->packages->find(intval($request['package_id']));
-            if(($patient->package_id != $request['package_id'] || ($patient->package_start_date != $request['package_start_date'] && $patient->package_end_date != $request['package_end_date'])) && $package->seating_count){
-                $request['available_count'] = $package->seating_count;
+            if($patient->package_id != $request['package_id'] || ($patient->package_start_date != $request['package_start_date'] && $patient->package_end_date != $request['package_end_date'])){
+                $request['available_count'] = $package->seating_count?  $package->seating_count : null;
             }
         }
 

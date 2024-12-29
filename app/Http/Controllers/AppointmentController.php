@@ -192,7 +192,7 @@ class AppointmentController extends Controller
 
             $patient =  Auth::user()->clinic->patients->find($appointment->patient_id);
             if($patient->package && $patient->package->id == $appointment->package_id && $patient->available_count){
-                $patient->available_count = $patient->available_count - 1;
+                $patient->available_count = $patient->available_count + 1;
                 $patient->save();
              }
         }
@@ -225,9 +225,18 @@ class AppointmentController extends Controller
 
          // Perform any necessary cleanup (e.g., deleting related records)
          // For example: $clinic->users()->delete(); if there are related users
- 
+         $patient = $appointment->patient;
          // Delete the appointment
-         $appointment->delete();
+         if($appointment->delete()){
+            if($patient->package && $patient->package->seating_count){
+                $available_count = intval($patient->available_count);
+                if($patient->package->seating_count >= $available_count && $available_count > 0){
+                    $patient->available_count = $available_count + 1;
+                    $patient->save();
+                }
+                
+            }
+         }
  
          // Return a JSON response
          return response()->json(['message' => 'Appointment deleted successfully'], 200);
