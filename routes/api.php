@@ -13,6 +13,7 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\MasterMedicineController;
 use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\MedicalHistoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +63,7 @@ Route::middleware(['whitelist.host'])->group(function () {
         Route::apiResource('doctors', DoctorController::class);
         Route::apiResource('patients', PatientController::class);
         Route::apiResource('appointments', AppointmentController::class);
+        Route::apiResource('medical_histories', MedicalHistoryController::class);
     });
 
 });

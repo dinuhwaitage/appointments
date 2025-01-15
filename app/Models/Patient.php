@@ -73,4 +73,9 @@ class Patient extends Model
     {
         return $this->morphMany(Asset::class, 'imageable');
     }
+
+    public function medical_histories()
+    {
+        return $this->hasMany(MedicalHistory::class, 'patient_id');
+    }
 }

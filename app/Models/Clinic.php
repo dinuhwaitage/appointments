@@ -89,4 +89,9 @@ class Clinic extends Model
     public function is_active(){
         return $this->status == 'ACTIVE';
     }
+
+    public function medical_histories()
+    {
+        return $this->hasMany(MedicalHistory::class, 'clinic_id');
+    }
 }
