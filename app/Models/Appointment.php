@@ -45,4 +45,9 @@ class Appointment extends Model
         return $this->morphMany(AdditionalFee::class, 'additionable_fee');
     }
 
+    public function medical_history()
+    {
+        return $this->hasOne(MedicalHistory::class, 'appointment_id');
+    }
+
 }

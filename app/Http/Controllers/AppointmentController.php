@@ -8,6 +8,7 @@ use App\Http\Resources\Appointments\AppointmentHistoryResource;
 use App\Http\Resources\Appointments\AppointmentAssetsResource;
 use App\Http\Resources\Contacts\ContactDetailResource;
 use App\Models\Appointment;
+use App\Models\MedicalHistory;
 use App\Models\AdditionalFee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -199,7 +200,16 @@ class AppointmentController extends Controller
 
           // Update employee details
           $appointment->update($request->only( ['date', 'time','details','status','doctor_id','diagnosis','fee','package_id','doctor_note','weight','height','seating_no','bp_detail','medical_history','family_medical_history','current_condition','observation_details','investigation_details','treatment_plan','procedures']));
+        if($request['medical_history'] || $request['family_medical_history']){
+            $medical_history = optional($appointment->medical_history)->id ? $appointment->medical_history : new MedicalHistory();
 
+                $medical_history->patient_detail = $request['medical_history'];
+                $medical_history->family_detail = $request['family_medical_history'];
+                $medical_history->appointment_id = $appointment->id;
+                $medical_history->patient_id = $appointment->patient_id;
+                $medical_history->clinic_id = $appointment->clinic_id;
+                $appointment->medical_history()->save($medical_history);
+        }
           if($request->has('assets')){
               foreach($request->assets as $asset){
                   if($asset && $asset['id'] && optional($asset)['destroy']){
