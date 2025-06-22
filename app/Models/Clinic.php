@@ -94,4 +94,14 @@ class Clinic extends Model
     {
         return $this->hasMany(MedicalHistory::class, 'clinic_id');
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }
