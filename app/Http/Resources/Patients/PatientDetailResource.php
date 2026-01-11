@@ -25,6 +25,7 @@ class PatientDetailResource extends JsonResource
             'number' => $this->number,
             'package_end_date' => $this->package_end_date,
             'abha_number' => $this->abha_number,
+            'total_appointments'=> $this->total_appointments_by_pkg(),
             'package' =>[
                 'id' => optional($this->package)->id,
                 'name' => optional($this->package)->name,

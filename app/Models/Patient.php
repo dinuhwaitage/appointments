@@ -58,6 +58,19 @@ class Patient extends Model
         
     }
 
+    public function total_appointments_by_pkg()
+    {
+        if ($this->package_id) {
+            return $this->appointments
+                ->where('package_id', $this->package_id)
+                ->where('status', '<>', 'CANCLED')
+                ->whereBetween('date', [$this->package_start_date, $this->package_end_date])
+                ->count();
+        } else {
+            return 0;
+        }
+    }
+
     public function package_appointments($package_id)
     {
         $pkg_id = $package_id ? $package_id : $this->package_id;
