@@ -14,6 +14,9 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\MasterMedicineController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\MedicalHistoryController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +67,10 @@ Route::middleware(['whitelist.host'])->group(function () {
         Route::apiResource('patients', PatientController::class);
         Route::apiResource('appointments', AppointmentController::class);
         Route::apiResource('medical_histories', MedicalHistoryController::class);
+
+        Route::apiResource('plans', PlanController::class);
+        Route::apiResource('subscriptions', SubscriptionController::class);
+        Route::apiResource('payments', PaymentController::class);
     });
 
 });
