@@ -13,6 +13,7 @@ use App\Models\Contact;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ContactController;
 
@@ -44,7 +45,7 @@ class DoctorController extends Controller
      */
     public function slim()
     {
-        $doctors = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR');
+        $doctors = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR')->where('status', '=', 'ACTIVE');
         return DoctorSlimResource::collection($doctors);
     }
 
@@ -129,8 +130,20 @@ class DoctorController extends Controller
         // Find the
         $employee = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR')->find($id);
 
+        // capture previous status for later comparison
+        $previousStatus = $employee->status;
+
         // Update employee details
         $employee->update($request->only( ['code', 'date_of_birth','date_of_join', 'qualification','status','gender','specification']));
+
+        // if status changed to inactive, also mark associated user inactive
+        if ($request->has('status') && $employee->status === 'INACTIVE' && $previousStatus !== 'INACTIVE') {
+            if ($employee->contact && $employee->contact->contactable instanceof User) {
+                $user = $employee->contact->contactable;
+                $user->status = 'INACTIVE';
+                $user->save();
+            }
+        }
 
         // Update address details if provided
         if ($request->has('address')) {
@@ -164,17 +177,44 @@ class DoctorController extends Controller
      */
     public function destroy( $id)
     {
-         // Find the doctor by ID
-         $doctor = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR')->find($id);
+         return DB::transaction(function () use ($id) {
+             // Find the doctor by ID
+             $doctor = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR')->find($id);
 
-         // Perform any necessary cleanup (e.g., deleting related records)
-         // For example: $clinic->users()->delete(); if there are related users
- 
-         // Delete the doctor
-         $doctor->delete();
- 
-         // Return a JSON response
-         return response()->json(['message' => 'Doctor deleted successfully'], 200);
+             if (! $doctor) {
+                 return response()->json(['message' => 'Doctor not found'], 404);
+             }
+
+             // if the doctor has any appointments we do not allow deletion
+             if ($doctor->appointments()->exists()) {
+                 return response()->json([
+                     'message' => 'Doctor has existing appointments. Please mark the doctor inactive instead of deleting.'
+                 ], 400);
+             }
+
+             // capture related contact and user before deleting the employee
+             $contact = $doctor->contact;
+             $user = null;
+             if ($contact) {
+                 // morphTo relationship will resolve to the owning model (User in this case)
+                 $user = $contact->contactable;
+             }
+
+             // delete the doctor record first
+             $doctor->delete();
+
+             // remove associated contact and user if they exist
+             if ($contact) {
+                 $contact->delete();
+             }
+
+             if ($user) {
+                 $user->delete();
+             }
+
+             // Return a JSON response
+             return response()->json(['message' => 'Doctor and related records deleted successfully'], 200);
+         });
     }
 
 }
