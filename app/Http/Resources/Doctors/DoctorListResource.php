@@ -23,6 +23,7 @@ class DoctorListResource extends JsonResource
             'designation' => $this->designation,
             'qualification' => $this->qualification,
             'specification'=> $this->specification,
+            'status' => $this->status,
             'contact' =>  $this->contact,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
