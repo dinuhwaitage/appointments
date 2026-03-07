@@ -45,7 +45,7 @@ class DoctorController extends Controller
      */
     public function slim()
     {
-        $doctors = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR');
+        $doctors = Auth::user()->clinic->employees->where('employee_type', '=', 'DOCTOR')->where('status', '=', 'ACTIVE');
         return DoctorSlimResource::collection($doctors);
     }
 
