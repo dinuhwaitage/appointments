@@ -25,4 +25,12 @@ class Employee extends Model
     {
         return $this->morphOne(Address::class, 'addressable');
     }
+
+    /**
+     * Appointments associated with this employee when they act as a doctor.
+     */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'doctor_id');
+    }
 }
