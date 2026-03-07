@@ -92,6 +92,41 @@ class DoctorDeletionTest extends TestCase
         $this->assertDatabaseHas('users', ['email' => 'alex@example.com', 'status' => 'INACTIVE']);
     }
 
+    public function test_reactivating_doctor_marks_user_active()
+    {
+        // create a clinic and the authenticated user
+        $clinic = Clinic::create(['name' => 'Test Clinic', 'status' => 'ACTIVE']);
+        $actor = User::factory()->create(['clinic_id' => $clinic->id]);
+        $this->actingAs($actor);
+
+        // create a new doctor via the API
+        $payload = [
+            'password' => 'secret123',
+            'code' => 'D004',
+            'contact' => [
+                'first_name' => 'Bob',
+                'last_name' => 'Smith',
+                'email' => 'bob@example.com',
+                'mobile' => '2223334444',
+            ],
+        ];
+        $response = $this->postJson('/api/doctors', $payload);
+        $response->assertStatus(201);
+        $doctorId = $response->json()['id'];
+
+        // first, set to inactive
+        $this->patchJson("/api/doctors/{$doctorId}", ['status' => 'INACTIVE']);
+        $this->assertDatabaseHas('users', ['email' => 'bob@example.com', 'status' => 'INACTIVE']);
+
+        // now, reactivate
+        $updateResponse = $this->patchJson("/api/doctors/{$doctorId}", ['status' => 'ACTIVE']);
+        $updateResponse->assertStatus(200);
+
+        // verify employee and user statuses
+        $this->assertDatabaseHas('employees', ['id' => $doctorId, 'status' => 'ACTIVE']);
+        $this->assertDatabaseHas('users', ['email' => 'bob@example.com', 'status' => 'ACTIVE']);
+    }
+
     public function test_prevent_deletion_if_doctor_has_appointments()
     {
         // create clinic and acting user

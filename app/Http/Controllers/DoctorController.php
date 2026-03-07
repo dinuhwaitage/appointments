@@ -123,6 +123,7 @@ class DoctorController extends Controller
         // Validate the request
         $request->validate([
             'code' => 'string|max:255',
+            'status' => 'in:ACTIVE,INACTIVE',
             'address' => 'array',
             'contact' => 'array'
         ]);
@@ -141,6 +142,15 @@ class DoctorController extends Controller
             if ($employee->contact && $employee->contact->contactable instanceof User) {
                 $user = $employee->contact->contactable;
                 $user->status = 'INACTIVE';
+                $user->save();
+            }
+        }
+
+        // if status changed to active from inactive, also mark associated user active
+        if ($request->has('status') && $employee->status === 'ACTIVE' && $previousStatus === 'INACTIVE') {
+            if ($employee->contact && $employee->contact->contactable instanceof User) {
+                $user = $employee->contact->contactable;
+                $user->status = 'ACTIVE';
                 $user->save();
             }
         }
