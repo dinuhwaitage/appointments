@@ -22,6 +22,7 @@ class PatientListResource extends JsonResource
             'registration_date' => $this->registration_date,
             'number' => $this->number,
             'package_end_date' => $this->package_end_date,
+            'follow_up_date' => $this->follow_up_date,
             'abha_number' => $this->abha_number,
             'is_expiring_soon' => $this->is_expiring_soon(),
             'package' =>[

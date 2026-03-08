@@ -19,7 +19,7 @@ class WhitelistHost
         // Define your whitelisted hosts
         $whitelistedHosts = [
             'localhost',
-            'app.doctoapp.in'
+            'app.doctoapp.in','dev.doctoapp.in'
         ];
 
         // Get the User-Agent from the request
