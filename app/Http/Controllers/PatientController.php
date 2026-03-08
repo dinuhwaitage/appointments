@@ -113,6 +113,7 @@ class PatientController extends Controller
             'date_of_birth' => 'nullable|date',
             'registration_date'  => 'nullable|date',
             'package_start_date'  => 'nullable|date',
+            'follow_up_date' => 'nullable|date',
             'address' => 'array',
             'contact' => 'required|array',
             'number'  => 'nullable|string', 
@@ -151,7 +152,7 @@ class PatientController extends Controller
             }
         }
         // Create the patient
-        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count']));
+        $patient = Patient::create($request->only( ['description','date_of_birth','status','clinic_id','contact_id','gender','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count','follow_up_date']));
 
 
         if ($request->has('address')) {
@@ -187,6 +188,7 @@ class PatientController extends Controller
         // Validate the request
         $request->validate([
             'description' => 'string|max:255',
+            'follow_up_date' => 'nullable|date',
             'address' => 'array',
             'contact' => 'array',
             'number'  => 'nullable|string', 
@@ -205,7 +207,7 @@ class PatientController extends Controller
         }
 
         // Update patient details
-        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count']));
+        $patient->update($request->only( ['description','status','gender','date_of_birth','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count','follow_up_date']));
 
 
         // Update address details if provided
