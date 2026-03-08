@@ -9,7 +9,7 @@ use DateTime;
 class Patient extends Model
 {
     use HasFactory;
-    protected $fillable = ['description', 'status','clinic_id','contact_id','date_of_birth','gender','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count'];
+    protected $fillable = ['description', 'status','clinic_id','contact_id','date_of_birth','gender','package_id','registration_date','package_start_date','number','package_end_date','abha_number','available_count','follow_up_date'];
 
     public function clinic()
     {
@@ -26,7 +26,7 @@ class Patient extends Model
         return $this->morphOne(Address::class, 'addressable');
     }
 
-    public function appoitments()
+    public function appointments()
     {
         return $this->hasMany(Appointment::class, 'patient_id');
     }
@@ -74,7 +74,7 @@ class Patient extends Model
     public function package_appointments($package_id)
     {
         $pkg_id = $package_id ? $package_id : $this->package_id;
-        return $this->appoitments->where('package_id', $pkg_id)->where('status','<>', 'CANCLED');
+        return $this->appointments->where('package_id', $pkg_id)->where('status','<>', 'CANCLED');
     }
 
     public function available_package_count($package_id = null)
