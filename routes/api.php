@@ -73,7 +73,7 @@ Route::middleware(['whitelist.host'])->group(function () {
         
         Route::post('payments/razorpay/order', [PaymentController::class, 'createOrder']);
         Route::post('payments/razorpay/verify', [PaymentController::class, 'verifyPayment']);
-        Route::apiResource('payments', PaymentController::class);
+        Route::apiResource('/payments', PaymentController::class);
     });
 
 });
