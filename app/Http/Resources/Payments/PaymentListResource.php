@@ -25,6 +25,7 @@ class PaymentListResource extends JsonResource
             'payment_date' => $this->payment_date,
             'description' => $this->description,
             'discount_amount' => $this->discount_amount,
+            'payment_type' => $this->payment_type,
             'subscription' => [
                 'id' => optional($this->subscription)->id,
                 'plan_id' => optional($this->subscription)->plan_id,

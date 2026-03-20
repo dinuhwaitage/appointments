@@ -70,6 +70,9 @@ Route::middleware(['whitelist.host'])->group(function () {
 
         Route::apiResource('plans', PlanController::class)->middleware('root.role');
         Route::apiResource('subscriptions', SubscriptionController::class)->middleware('root.role');
+        
+        Route::post('payments/razorpay/order', [PaymentController::class, 'createOrder']);
+        Route::post('payments/razorpay/verify', [PaymentController::class, 'verifyPayment']);
         Route::apiResource('payments', PaymentController::class);
     });
 

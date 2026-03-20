@@ -26,6 +26,7 @@ class PaymentDetailResource extends JsonResource
             'description' => $this->description,
             'response' => $this->response,
             'discount_amount' => $this->discount_amount,
+            'payment_type' => $this->payment_type,
             'subscription' => [
                 'id' => optional($this->subscription)->id,
                 'plan_id' => optional($this->subscription)->plan_id,
