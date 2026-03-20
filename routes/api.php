@@ -68,8 +68,8 @@ Route::middleware(['whitelist.host'])->group(function () {
         Route::apiResource('appointments', AppointmentController::class);
         Route::apiResource('medical_histories', MedicalHistoryController::class);
 
-        Route::apiResource('plans', PlanController::class);
-        Route::apiResource('subscriptions', SubscriptionController::class);
+        Route::apiResource('plans', PlanController::class)->middleware('root.role');
+        Route::apiResource('subscriptions', SubscriptionController::class)->middleware('root.role');
         Route::apiResource('payments', PaymentController::class);
     });
 

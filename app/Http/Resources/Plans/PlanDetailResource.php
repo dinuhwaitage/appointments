@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Packages;
+namespace App\Http\Resources\Plans;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PackageDetailResource extends JsonResource
+class PlanDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,14 +17,10 @@ class PackageDetailResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'seating_count' => $this->seating_count,
-            'amount' => $this->amount,
+            'price' => $this->price,
+            'billing_cycle' => $this->billing_cycle,
             'description' => $this->description,
             'status' => $this->status,
-            'clinic' =>[
-                'id' => $this->clinic->id,
-                'name' => $this->clinic->name
-            ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

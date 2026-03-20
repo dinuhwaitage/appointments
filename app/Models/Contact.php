@@ -70,6 +70,11 @@ class Contact extends Model
         return optional(optional($this->roles())->first())->name;
     }
 
+    public function hasRole($roleName)
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
+
     public function address()
     {
         return $this->morphOne(Address::class, 'addressable');

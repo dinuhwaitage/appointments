@@ -16,14 +16,20 @@ class PaymentDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
+            'user_id' => $this->user_id,
+            'clinic_id' => $this->clinic_id,
+            'subscription_id' => $this->subscription_id,
             'amount' => $this->amount,
-            'description' => $this->description,
             'status' => $this->status,
-            'plan' =>[
-                'id' => $this->plan->id,
-                'name' => $this->plan->name
+            'transaction_id' => $this->transaction_id,
+            'payment_date' => $this->payment_date,
+            'description' => $this->description,
+            'response' => $this->response,
+            'subscription' => [
+                'id' => optional($this->subscription)->id,
+                'plan_id' => optional($this->subscription)->plan_id,
+                'start_date' => optional($this->subscription)->start_date,
+                'end_date' => optional($this->subscription)->end_date,
             ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

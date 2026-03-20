@@ -11,14 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
-    private function authorizeRoot()
-    {
-        if (optional(Auth::user()->contact)->firstRole() !== 'ROOT') {
-            return response()->json(['message' => 'User does not have permission to access subscriptions.'], 422);
-        }
-        return null;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,9 +18,6 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        if ($response = $this->authorizeRoot()) {
-            return $response;
-        }
         $subscriptions = Auth::user()->clinic->subscriptions;
         return SubscriptionListResource::collection($subscriptions);
     }
@@ -42,10 +31,6 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request)
     {
-       if ($response = $this->authorizeRoot()) {
-           return $response;
-       }
-
         // Validate the request
         $request->validate([
            'plan_id' =>'required|integer', 
@@ -72,10 +57,6 @@ class SubscriptionController extends Controller
      */
     public function show($id)
     {
-        if ($response = $this->authorizeRoot()) {
-            return $response;
-        }
-
         $subscription = Auth::user()->clinic->subscriptions()->find($id);
         if (!$subscription) {
             return response()->json(['message' => 'Subscription not found'], 404);
@@ -93,10 +74,6 @@ class SubscriptionController extends Controller
      */
     public function update(Request $request, $id)
     {
-       if ($response = $this->authorizeRoot()) {
-           return $response;
-       }
-
        // Validate the request
        $request->validate([
         'plan_id' =>'integer', 
@@ -125,10 +102,6 @@ class SubscriptionController extends Controller
      */
     public function destroy($id)
     {
-        if ($response = $this->authorizeRoot()) {
-            return $response;
-        }
-
         // Find the subscription by ID
         $subscription = Auth::user()->clinic->subscriptions()->find($id);
         if (!$subscription) {

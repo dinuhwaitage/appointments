@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Payments\PaymentDetailResource;
 use App\Http\Resources\Payments\PaymentListResource;
-use App\Models\User;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +17,8 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        return response()->json(Payment::all());
+        $payments = Auth::user()->clinic->payments;
+        return PaymentListResource::collection($payments);
     }
 
 
