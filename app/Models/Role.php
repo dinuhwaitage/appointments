@@ -49,7 +49,8 @@ class Role extends Model
                 "Medicine"=>["list","read","add","edit","delete"],
                 "Prescription"=>["list","read","add","edit","delete"],
                 "Report"=>["list","read"],
-                "Clinic"=>["dashboard","read","edit"]
+                "Clinic"=>["dashboard","read","edit"],
+                "Payment"=>["list","read","add","edit","delete"]
             ];
         }elseif($this->name == 'ROOT'){
             return [
@@ -65,7 +66,8 @@ class Role extends Model
                 "Report"=>["list","read"],
                 "Clinic"=>["dashboard","read","edit"],
                 "Plan"=>["list","read","add","edit","delete"],
-                "Subscription"=>["list","read","add","edit","delete"]
+                "Subscription"=>["list","read","add","edit","delete"],
+                "Payment"=>["list","read","add","edit","delete"]
             ];
         }
 

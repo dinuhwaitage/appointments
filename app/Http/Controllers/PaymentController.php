@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
+    private function authorizeAdminOrRoot()
+    {
+        $user = Auth::user();
+        if (!$user || !$user->contact || (!optional($user->contact)->hasRole('ADMIN') && !optional($user->contact)->hasRole('ROOT'))) {
+            return response()->json(['message' => 'User does not have permission to access payments.'], 422);
+        }
+        return null;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,6 +26,9 @@ class PaymentController extends Controller
      */
     public function index()
     {
+        if ($response = $this->authorizeAdminOrRoot()) {
+            return $response;
+        }
         $payments = Auth::user()->clinic->payments;
         return PaymentListResource::collection($payments);
     }
@@ -30,6 +42,10 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
+        if ($response = $this->authorizeAdminOrRoot()) {
+            return $response;
+        }
+
         // Validate the request
         $request->validate([
             'subscription_id'=>'integer', 
@@ -61,7 +77,14 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        $payment = Auth::user()->clinic->payments->find($id);
+        if ($response = $this->authorizeAdminOrRoot()) {
+            return $response;
+        }
+
+        $payment = Auth::user()->clinic->payments()->find($id);
+        if (!$payment) {
+            return response()->json(['message' => 'Payment not found'], 404);
+        }
         return new PaymentDetailResource($payment);
     }
 
@@ -74,6 +97,10 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if ($response = $this->authorizeAdminOrRoot()) {
+            return $response;
+        }
+
         // Validate the request
         $request->validate([
             'subscription_id'=>'integer', 
@@ -88,11 +115,14 @@ class PaymentController extends Controller
             'subscription_id' =>'integer'
        ]);
 
-         // Find the 
+         // Find the payment
          $payment = Auth::user()->clinic->payments->find($id);
+         if (!$payment) {
+             return response()->json(['message' => 'Payment not found'], 404);
+         }
 
          // Update payment details
-         $payment->update($request->only( ['user_id', 'amount','status','description','payment_date','discount_amount','transaction_id','subscription_id']));
+         $payment->update($request->only(['amount','status','description','payment_date','discount_amount','transaction_id','subscription_id']));
          return response()->json($payment, 200);
     }
 
@@ -104,8 +134,15 @@ class PaymentController extends Controller
      */
     public function destroy($id)
     {
+        if ($response = $this->authorizeAdminOrRoot()) {
+            return $response;
+        }
+
         // Find the payment by ID
         $payment = Auth::user()->clinic->payments->find($id);
+        if (!$payment) {
+            return response()->json(['message' => 'Payment not found'], 404);
+        }
 
         // Delete the payment
         $payment->delete();
