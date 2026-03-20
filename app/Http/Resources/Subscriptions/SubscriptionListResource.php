@@ -18,12 +18,12 @@ class SubscriptionListResource extends JsonResource
             'id' => $this->id,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'amount' => $this->amount,
+            'plan_price' => optional($this->plan)->price,
             'description' => $this->description,
             'status' => $this->status,
             'plan' =>[
-                'id' => $this->plan->id,
-                'name' => $this->plan->name
+                'id' => optional($this->plan)->id,
+                'name' => optional($this->plan)->name
             ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

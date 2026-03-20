@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Subscriptions\SubscriptionDetailResource;
 use App\Http\Resources\Subscriptions\SubscriptionListResource;
-use App\Models\User;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,19 +34,20 @@ class SubscriptionController extends Controller
        
         // Validate the request
         $request->validate([
-           'plan_id' =>'integer', 
-           'start_date' => 'date', 
-           'end_date' => 'date', 
-           'status' => 'string',
+           'plan_id' =>'required|integer', 
+           'start_date' => 'required|date', 
+           'end_date' => 'nullable|date', 
+           'status' => 'nullable|string',
            'description' =>'nullable|string'
        ]);
 
        $clinic_id = Auth::user()->clinic_id;
-       $request['clinic_id'] = $clinic_id;
+       $data = $request->only(['plan_id', 'start_date', 'end_date', 'status', 'description']);
+       $data['clinic_id'] = $clinic_id;
 
-        // Create the package
-        $package = Package::create($request->only( ['name', 'amount','status','description', 'clinic_id','seating_count']));
-        return response()->json($package, 201);
+        // Create the subscription
+        $subscription = Subscription::create($data);
+        return response()->json($subscription, 201);
     }
 
     /**
@@ -57,7 +58,10 @@ class SubscriptionController extends Controller
      */
     public function show($id)
     {
-        $subscription = Auth::user()->clinic->subscriptions->find($id);
+        $subscription = Auth::user()->clinic->subscriptions()->find($id);
+        if (!$subscription) {
+            return response()->json(['message' => 'Subscription not found'], 404);
+        }
         return new SubscriptionDetailResource($subscription);
     }
 
@@ -80,11 +84,14 @@ class SubscriptionController extends Controller
         'description' =>'nullable|string'
         ]);
 
-         // Find the 
-         $subscription = Auth::user()->clinic->subscriptions->find($id);
+         // Find the subscription
+         $subscription = Auth::user()->clinic->subscriptions()->find($id);
+         if (!$subscription) {
+             return response()->json(['message' => 'Subscription not found'], 404);
+         }
 
-         // Update employee details
-         $subscription->update($request->only( ['clinic_id', 'plan_id', 'start_date', 'end_date', 'status','description']));
+         // Update subscription details
+         $subscription->update($request->only(['plan_id', 'start_date', 'end_date', 'status', 'description']));
          return response()->json($subscription, 200);
     }
 
@@ -97,7 +104,10 @@ class SubscriptionController extends Controller
     public function destroy($id)
     {
         // Find the subscription by ID
-        $subscription = Auth::user()->clinic->subscriptions->find($id);
+        $subscription = Auth::user()->clinic->subscriptions()->find($id);
+        if (!$subscription) {
+            return response()->json(['message' => 'Subscription not found'], 404);
+        }
 
         // Delete the subscription
         $subscription->delete();
