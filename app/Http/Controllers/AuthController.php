@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -45,6 +46,21 @@ class AuthController extends Controller
         if ($temp_user && $temp_user->is_active()) {
             // Check if the user's clinic is active
             if ($temp_user->clinic && $temp_user->clinic->is_active()) {
+                // Check if user is ROOT, if not, check subscription
+                if (optional($temp_user->contact)->firstRole() !== 'ROOT') {
+                    $hasActiveSubscription = $temp_user->clinic->subscriptions()
+                        ->where('status', 'ACTIVE')
+                        ->where(function($query) {
+                            $query->whereNull('end_date')
+                                  ->orWhere('end_date', '>=', Carbon::now());
+                        })
+                        ->exists();
+
+                    if (!$hasActiveSubscription) {
+                        return response()->json(['message' => 'Subscription is expired or contact support team to renew subscription'], 403);
+                    }
+                }
+
                 if (!Auth::attempt($credentials)) {
                     throw ValidationException::withMessages([
                         'email' => ['The provided credentials are incorrect.'],
