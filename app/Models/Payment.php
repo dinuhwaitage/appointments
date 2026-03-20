@@ -13,7 +13,7 @@ class Payment extends Model
         'response' => 'array', // Laravel automatically converts JSON to array
     ];
 
-    protected $fillable = ['user_id', 'clinic_id', 'subscription_id', 'amount', 'status', 'transaction_id','payment_date','description','response'];
+    protected $fillable = ['user_id', 'clinic_id', 'subscription_id', 'amount', 'status', 'transaction_id','payment_date','description','response', 'discount_amount'];
 
     public function user()
     {

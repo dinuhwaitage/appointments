@@ -25,6 +25,7 @@ class PaymentDetailResource extends JsonResource
             'payment_date' => $this->payment_date,
             'description' => $this->description,
             'response' => $this->response,
+            'discount_amount' => $this->discount_amount,
             'subscription' => [
                 'id' => optional($this->subscription)->id,
                 'plan_id' => optional($this->subscription)->plan_id,
