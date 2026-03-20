@@ -49,8 +49,13 @@ class PlanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($plan)
+    public function show($id)
     {
+        $plan = Plan::find($id);
+        if (!$plan) {
+            return response()->json(['message' => 'Plan not found'], 404);
+        }
+
         return new PlanDetailResource($plan);
     }
 
@@ -62,8 +67,9 @@ class PlanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $plan)
+    public function update(Request $request, $id)
     {
+        $plan = Plan::find($id);
          // Validate the request
          $request->validate([
             'name' => 'string',
@@ -84,8 +90,12 @@ class PlanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($plan)
+    public function destroy($id)
     {
+        $plan = Plan::find($id);
+        if (!$plan) {
+            return response()->json(['message' => 'Plan not found'], 404);
+        }
         $plan->delete();
         return response()->json(['message' => 'Plan deleted successfully'], 204);
     }
