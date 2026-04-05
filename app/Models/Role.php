@@ -50,7 +50,7 @@ class Role extends Model
                 "Prescription"=>["list","read","add","edit","delete"],
                 "Report"=>["list","read"],
                 "Clinic"=>["dashboard","read","edit"],
-                "Payment"=>["list","read","add","edit","delete"]
+                "Payment"=>["list","read"]
             ];
         }elseif($this->name == 'ROOT'){
             return [
