@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Auth\AuthenticationException;
@@ -56,9 +57,16 @@ class Handler extends ExceptionHandler
             ], 401);
         }
 
+        if ($exception instanceof QueryException && str_contains($exception->getMessage(), 'foreign key') || str_contains($exception->getMessage(), 'Integrity constraint violation')) {
+            return response()->json([
+                'error' => 'Delete blocked',
+                'message' => 'This item is being used by another record and cannot be deleted.',
+            ], 409);
+        }
+
         return response()->json([
             'error' => 'Server error',
-            'message' => $exception->getMessage(),
+            'message' => 'Something went wrong. Please try again later.',
         ], 500);
     }
 }
